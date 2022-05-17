@@ -5,7 +5,8 @@ import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import com.store.videogames.services.VideogameService;
-import com.store.videogames.util.EmailUtil;
+import com.store.videogames.util.EmailUtilImpl;
+import com.store.videogames.util.interfaces.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CustomerController
     }
 
     @PostMapping("/newCustomer")
-    public String createNewCustomer(@ModelAttribute("customer") Customer customer, BindingResult bindingResult) throws MessagingException {
+    public String createNewCustomer(@Valid @ModelAttribute("customer") Customer customer, BindingResult bindingResult) throws MessagingException {
         long startTime = System.currentTimeMillis();
         if (bindingResult.hasErrors())
         {

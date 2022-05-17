@@ -1,7 +1,5 @@
 package com.store.videogames.config;
 
-import com.store.videogames.repository.CustomerDetailsServiceImpl;
-import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

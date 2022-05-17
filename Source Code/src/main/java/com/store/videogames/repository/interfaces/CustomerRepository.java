@@ -27,4 +27,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>
     List<Customer> getCustomerByRole(String role);
     List<Customer> getCustomerByEnabled(Boolean isEnabled);
     List<Customer> getCustomerByRegistrationTime(LocalTime registrationTime);
+
+    Customer getCustomerByResetPasswordToken(String token);
 }

@@ -87,6 +87,8 @@ public class Customer
             inverseJoinColumns = @JoinColumn(name = "customer_videogame"))
     private List<Videogame> videogameList;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
 
     /*Setters and getters area*/
     public List<Videogame> getVideogameList()
@@ -210,4 +212,13 @@ public class Customer
         this.enabled = enabled;
     }
 
+    public void setResetPasswordToken(String resetPasswordToken)
+    {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public String getResetPasswordToken()
+    {
+        return resetPasswordToken;
+    }
 }

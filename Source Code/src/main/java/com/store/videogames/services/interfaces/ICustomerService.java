@@ -20,4 +20,6 @@ public interface ICustomerService
     List<Customer> getCustomersByRegistrationTime(LocalTime registrationTime);
     List<Customer> getCustomersByRole(String Role);
     List<Customer> getCustomersByEnabled(Boolean enabled);
+
+    Customer getCustomerByResetPasswordToken(String token);
 }

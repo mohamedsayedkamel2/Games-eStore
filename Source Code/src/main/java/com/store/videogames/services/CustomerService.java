@@ -1,14 +1,17 @@
 package com.store.videogames.services;
 
+import com.store.videogames.config.PasswordEncoder;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import com.store.videogames.services.interfaces.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+@Service
 public class CustomerService implements ICustomerService
 {
     @Autowired
@@ -73,4 +76,30 @@ public class CustomerService implements ICustomerService
     {
         return customerRepository.getCustomerByEnabled(isEnabled);
     }
+/*Start of forgot-password feature code*/
+    @Override
+    public Customer getCustomerByResetPasswordToken(String token)
+    {
+        return customerRepository.getCustomerByResetPasswordToken(token);
+    }
+
+    public void updateResetPasswordToken(String token, String email)
+    {
+        Customer customer = customerRepository.getCustomerByEmail(email);
+        if (customer != null)
+        {
+            customer.setResetPasswordToken(token);
+            customerRepository.save(customer);
+        }
+    }
+
+    public void updatePassword(Customer customer, String newPassword)
+    {
+        String encodedPassword = PasswordEncoder.bCryptPasswordEncoder(newPassword);
+        customer.setPassword(encodedPassword);
+        customer.setResetPasswordToken(null);
+        customerRepository.save(customer);
+    }
+/*End of forget-password feature code*/
+
 }
