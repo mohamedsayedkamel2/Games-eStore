@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/videogame/add}" th:object="${videogame}" method="post">
+    Videogame name: <input th:field="*{gameName}"><br>
+    Platform(s):<li th:each="platform : ${list}">
+    <input type="checkbox" th:field="*{videogamePlatforms}" th:value="${platform}">
+    <label th:text="${platform.platformName}"></label>
+</li>
+    Quantity: <input th:field="*{quantity}"><br>
+    Price: <input th:field="*{price}"><br>
+    releaseDate: <input th:field="*{releaseDate}" type="date"><br>
+    publisher: <input th:field="*{publisher}"><br>
+    Developer: <input th:field="*{developer}"><br>
+    description: <input th:field="*{description}"><br>
+    <button type="submit">Sumbit</button>
+</form>
+</body>
+</html>

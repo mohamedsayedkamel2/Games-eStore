@@ -1,2 +1,2 @@
 # VideogameStore
-Video game web application
+A spring boot web application

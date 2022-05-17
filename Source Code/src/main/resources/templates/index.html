@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+</head>
+<body>
+Create user link: <a href="#" th:href="@{/customer/newCustomer}" target="_blank">Create a new customer</a>
+Buy a videogame link: <a href="#" th:href="@{/customer/newVideogame}" target="_blank">Buy a videogame</a>
+Create a videogame link: <a href="#" th:href="@{/videogame/add}" target="_blank">Create a videogame</a>
+Take a look at all customers link: <a href="#" th:href="@{/customer/allCustomers}" target="_blank">All Customers</a>
+Logout link: <form th:action="@{/logout}" method="post">
+    <input type="submit" value="logout">
+</form>
+</body>
+</html>
