@@ -1,5 +1,6 @@
 package com.store.videogames.config;
 
+import com.store.videogames.common.PasswordEncoder;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -27,12 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerDetailsServiceImpl();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new CustomerDetails();
     }
 
     @Bean
@@ -40,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(PasswordEncoder.getBcryptPasswordEncoder());
         return authenticationProvider;
     }
 
@@ -62,9 +57,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception
     {
         http.authorizeRequests().
+                antMatchers("/login").permitAll().
+                antMatchers("/customer/register").permitAll().
+                antMatchers("/forgot_password").permitAll().
+                antMatchers("/reset_password").permitAll().
+//                antMatchers("/verify").permitAll().
                 anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll().loginPage("/login").permitAll().
-                and().logout().permitAll().and().rememberMe().tokenRepository(persistentTokenRepository());
+                .formLogin().permitAll().loginPage("/login").
+                usernameParameter("username").passwordParameter("password")
+                .permitAll().failureUrl("/login?error").defaultSuccessUrl("/").
+                and().logout().permitAll().
+                and().rememberMe().tokenRepository(persistentTokenRepository());
     }
 }

@@ -1,16 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title>Homepage</title>
+    <title>Gaming4All</title>
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+    </style>
 </head>
 <body>
-Create user link: <a href="#" th:href="@{/customer/newCustomer}" target="_blank">Create a new customer</a>
-Buy a videogame link: <a href="#" th:href="@{/customer/newVideogame}" target="_blank">Buy a videogame</a>
-Create a videogame link: <a href="#" th:href="@{/videogame/add}" target="_blank">Create a videogame</a>
-Take a look at all customers link: <a href="#" th:href="@{/customer/allCustomers}" target="_blank">All Customers</a>
-Logout link: <form th:action="@{/logout}" method="post">
-    <input type="submit" value="logout">
+<p>Hello [[${#request.userPrincipal.principal.customer.username}]]</p>
+<a href="#" th:href="@{/userProfile}" sec:authentication="principal.customer.username" target="_blank"></a>
+<table>
+    <tr>
+        <th>Game Name</th>
+        <th>Platforms</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Developer</th>
+        <th>Publisher</th>
+        <th>Release Date</th>
+        <th>Description</th>
+    </tr>
+    <tr th:each="videogame : ${videogames}">
+        <td th:text="${videogame.gameName}"></td>
+        <td th:text="${videogame.videogamePlatforms}"></td>
+        <td th:text="${videogame.price}"></td>
+        <td th:text="${videogame.quantity != 0} ? ${videogame.quantity} : 'Not avaliable'"></td>
+        <td th:text="${videogame.developer}"></td>
+        <td th:text="${videogame.publisher}"></td>
+        <td th:text="${videogame.releaseDate}"></td>
+        <td th:text="${videogame.description}"></td>
+    </tr>
+</table>
 </form>
 </body>
 </html>
+<!--Create a videogame link: <a href="#" th:href="@{/videogame/add}" target="_blank">Create a videogame</a>-->
+<!--Buy a videogame link: <a href="#" th:href="@{/customer/newVideogame}" target="_blank">Buy a videogame</a>-->
+<!--Logout link: <form th:action="@{/logout}" method="post">-->
+<!--    <input type="submit" value="logout">-->

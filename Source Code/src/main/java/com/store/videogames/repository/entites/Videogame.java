@@ -1,6 +1,8 @@
 package com.store.videogames.repository.entites;
 
 import com.store.videogames.repository.entites.enums.Platforms;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.CollectionTable;
@@ -9,18 +11,17 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Videogame
 {
     @Id
@@ -153,10 +154,6 @@ public class Videogame
         this.videogamePlatforms = videogamePlatforms;
     }
 
-    public Videogame()
-    {
-    }
-
     public Videogame(String gameName, String platform, int quantity, float price, LocalDate releaseDate, String publisher, String developer, String description) {
         this.gameName = gameName;
         this.quantity = quantity;
@@ -170,16 +167,6 @@ public class Videogame
     @Override
     public String toString()
     {
-        return "Videogame{" +
-                "id=" + id +
-                ", gameName='" + gameName + '\'' +
-                ", videogamePlatforms=" + videogamePlatforms +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", releaseDate=" + releaseDate +
-                ", publisher='" + publisher + '\'' +
-                ", developer='" + developer + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return gameName;
     }
 }

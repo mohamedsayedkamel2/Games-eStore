@@ -10,9 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/videogame")
@@ -25,7 +23,7 @@ public class VideogameController
     String getAddVideogamePage(@ModelAttribute("videogame") Videogame videogame, Model model)
     {
         model.addAttribute("list", Platforms.values());
-        return "createVideogame";
+        return "/videogame/createVideogame";
     }
 
     @GetMapping("createVideogame")
@@ -40,10 +38,9 @@ public class VideogameController
         if (bindingResult.hasErrors())
         {
             System.out.println(bindingResult.getAllErrors());
-            return "redirect:/index";
+            return "redirect:/";
         }
-        System.out.println(videogame.getVideogamePlatforms());
         videogameService.storeNewVideogame(videogame);
-        return "redirect:/customer/allCustomers";
+        return "redirect:/";
     }
 }

@@ -1,7 +1,6 @@
 package com.store.videogames.config;
 
 import com.store.videogames.repository.entites.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +10,8 @@ import java.util.Collection;
 
 public class CustomerSecurityDetails implements UserDetails
 {
-
-    Customer customer;
+    
+    private Customer customer;
 
     public CustomerSecurityDetails(Customer customer)
     {
@@ -48,7 +47,7 @@ public class CustomerSecurityDetails implements UserDetails
     @Override
     public boolean isAccountNonLocked()
     {
-        return true;
+        return customer.getEnabled();
     }
 
     @Override
@@ -60,6 +59,11 @@ public class CustomerSecurityDetails implements UserDetails
     @Override
     public boolean isEnabled()
     {
-        return true;
+        return customer.getEnabled();
+    }
+
+    public Customer getCustomer()
+    {
+        return customer;
     }
 }

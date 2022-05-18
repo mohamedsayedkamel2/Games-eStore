@@ -1,8 +1,8 @@
-package com.store.videogames.controllers;
+package com.store.videogames.common;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class Utility
+public class WebsiteUrlGetterClass
 {
     public static String getSiteURL(HttpServletRequest request)
     {

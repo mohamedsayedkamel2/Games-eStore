@@ -2,13 +2,14 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Registration Page</title>
 </head>
 <body>
-<form th:action="@{/customer/newCustomer}" th:object="${customer}" method="post">
+<form th:action="@{/customer/register}" th:object="${customer}" method="post">
     Your First name: <input th:field="*{firstName}"><br>
     Your Last name: <input th:field="*{LastName}"><br>
     Your username: <input th:field="*{username}"><br>
+
     Your email: <input th:field="*{email}" type="email"><br>
     Your password: <input th:field="*{password}" type="password"><br>
     Your country: <input th:field="*{countryName}"><br>

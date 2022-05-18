@@ -16,7 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -89,6 +88,9 @@ public class Customer
 
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
+
+    @Column(name = "email_verification_code", length = 60)
+    private String emailVerificationCode;
 
     /*Setters and getters area*/
     public List<Videogame> getVideogameList()
@@ -202,7 +204,7 @@ public class Customer
         this.role = role;
     }
 
-    public boolean isEnabled()
+    public boolean getEnabled()
     {
         return enabled;
     }
@@ -220,5 +222,15 @@ public class Customer
     public String getResetPasswordToken()
     {
         return resetPasswordToken;
+    }
+
+    public String getEmailVerificationCode()
+    {
+        return emailVerificationCode;
+    }
+
+    public void setEmailVerificationCode(String emailVerificationCode)
+    {
+        this.emailVerificationCode = emailVerificationCode;
     }
 }

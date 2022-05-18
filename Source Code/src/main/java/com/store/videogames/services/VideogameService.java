@@ -19,7 +19,6 @@ public class VideogameService implements IVideogameService
     public void storeNewVideogame(Videogame videogame)
     {
         videogameRepository.save(videogame);
-        System.out.println("The videogame had been saved into the database succesfuly");
     }
 
     @Override

@@ -13,12 +13,22 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer>
 {
-    //This functions gets a Customer Object by it's email
+
+    /**
+     * This function is special because the spring seucrity uses it for user login form
+     */
     @Query("SELECT u FROM Customer u WHERE u.email = :email")
     Customer getConfigUsername(@Param("email") String email);
 
+    //These functions gets a Customer Object
     Customer getCustomerByEmail(String email);
     Customer getCustomerByUsername(String username);
+    Customer getCustomerByResetPasswordToken(String token);
+
+    @Query("SELECT u FROM Customer u WHERE u.emailVerificationCode = ?1")
+    Customer getCustomerByEmailVerificationCode(String emailVerificationCode);
+
+    //These functions get a List of Customer Objects
     List<Customer> getCustomerByCountryName(String countryName);
     List<Customer> getCustomerByCityName(String cityName);
     List<Customer> getCustomerByStreetName(String streetName);
@@ -28,5 +38,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>
     List<Customer> getCustomerByEnabled(Boolean isEnabled);
     List<Customer> getCustomerByRegistrationTime(LocalTime registrationTime);
 
-    Customer getCustomerByResetPasswordToken(String token);
+
 }
