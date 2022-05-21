@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,40 +23,43 @@ import java.util.List;
 public class Videogame
 {
     @Id
-    @Column(name = "game_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "game_name")
     @NotNull
     public String gameName;
 
-    @ElementCollection(targetClass = Platforms.class)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "videogame_platform",
-            joinColumns = @JoinColumn(name = "videogame_id"))
-    @Column(name = "platform_name")
-    @NotNull
-    private List<Platforms> videogamePlatforms;
+    @JoinColumn(name = "platforms_name")
+    @Column(name = "platform")
+    Platforms platform;
+
     @Column
-    @NotNull
-    private int quantity;
+    float price;
+
     @Column
-    @NotNull
-    private float price;
+    int quantity;
+
     @Column(name = "release_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
     private LocalDate releaseDate;
+
     @Column
     @NotNull
     private String publisher;
+
     @Column
     @NotNull
     private String developer;
+
     @Column
     @NotNull
     private String description;
 
+    //private List<CustomerMoneyHistory> customerMoneyHistoryList;
 
     /*
     Setters and getters area
@@ -84,14 +85,14 @@ public class Videogame
         this.gameName = gameName;
     }
 
-    public int getQuantity()
+    public Platforms getPlatform()
     {
-        return quantity;
+        return platform;
     }
 
-    public void setQuantity(int quantity)
+    public void setPlatform(Platforms platform)
     {
-        this.quantity = quantity;
+        this.platform = platform;
     }
 
     public float getPrice()
@@ -102,6 +103,16 @@ public class Videogame
     public void setPrice(float price)
     {
         this.price = price;
+    }
+
+    public int getQuantity()
+    {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity)
+    {
+        this.quantity = quantity;
     }
 
     public LocalDate getReleaseDate()
@@ -144,29 +155,19 @@ public class Videogame
         this.description = description;
     }
 
-    public List<Platforms> getVideogamePlatforms()
-    {
-        return videogamePlatforms;
-    }
-
-    public void setVideogamePlatforms(List<Platforms> videogamePlatforms)
-    {
-        this.videogamePlatforms = videogamePlatforms;
-    }
-
-    public Videogame(String gameName, String platform, int quantity, float price, LocalDate releaseDate, String publisher, String developer, String description) {
-        this.gameName = gameName;
-        this.quantity = quantity;
-        this.price = price;
-        this.releaseDate = releaseDate;
-        this.publisher = publisher;
-        this.developer = developer;
-        this.description = description;
-    }
-
     @Override
     public String toString()
     {
-        return gameName;
+        return "Videogame{" +
+                "id=" + id +
+                ", gameName='" + gameName + '\'' +
+                ", platform=" + platform +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", releaseDate=" + releaseDate +
+                ", publisher='" + publisher + '\'' +
+                ", developer='" + developer + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

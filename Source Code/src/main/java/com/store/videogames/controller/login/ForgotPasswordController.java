@@ -1,8 +1,8 @@
-package com.store.videogames.controllers;
+package com.store.videogames.controller.login;
 
-import com.store.videogames.common.WebsiteUrlGetterClass;
+import com.store.videogames.util.common.WebsiteUrlGetterClass;
 import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.services.CustomerService;
+import com.store.videogames.service.customer.CustomerServiceImpl;
 import com.store.videogames.util.interfaces.EmailUtil;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ForgotPasswordController
     @Autowired
     EmailUtil emailUtil;
     @Autowired
-    private CustomerService customerService;
+    private CustomerServiceImpl customerServiceImpl;
 
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm()
@@ -35,7 +35,7 @@ public class ForgotPasswordController
     {
         String email = request.getParameter("email");
         String token = RandomString.make(30);
-        customerService.updateResetPasswordToken(token, email);
+        customerServiceImpl.updateResetPasswordToken(token, email);
         String resetPasswordLink = WebsiteUrlGetterClass.getSiteURL(request) + "/reset_password?token=" + token;
         sendEmail(email, resetPasswordLink);
         System.out.println("Email sent successfuly");
@@ -60,7 +60,7 @@ public class ForgotPasswordController
     @GetMapping("/reset_password")
     public String showResetPasswordForm(@RequestParam("token") String token, Model model)
     {
-        Customer customer = customerService.getCustomerByResetPasswordToken(token);
+        Customer customer = customerServiceImpl.getCustomerByResetPasswordToken(token);
         model.addAttribute("token", token);
         if (customer == null)
         {
@@ -76,7 +76,7 @@ public class ForgotPasswordController
         String token = request.getParameter("token");
         String password = request.getParameter("password");
 
-        Customer customer = customerService.getCustomerByResetPasswordToken(token);
+        Customer customer = customerServiceImpl.getCustomerByResetPasswordToken(token);
         model.addAttribute("title", "Reset your password");
 
         if (customer == null)
@@ -86,7 +86,7 @@ public class ForgotPasswordController
         }
         else
         {
-            customerService.updatePassword(customer, password);
+            customerServiceImpl.updatePassword(customer, password);
             model.addAttribute("message", "You have successfully changed your password.");
         }
         return "/customer/PasswordChangeMessage";

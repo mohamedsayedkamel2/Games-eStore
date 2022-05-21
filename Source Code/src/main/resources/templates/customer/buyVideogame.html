@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Page</title>
+</head>
+<body>
+
+<form th:action="@{/videogame/buy}" method="post" th:object="${videogame}">
+    <input th:field="*{id}" hidden>
+    Game name: <p th:text="*{gameName}"></p><br>
+    Game price: <p th:text="*{price}"></p><br>
+    Game quantity: <input type="number" min="1" th:max="*{quantity}" th:field="*{quantity}">
+    <button type="submit">Sumbit</button>
+</form>
+</body>
+</html>

@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class CustomerSecurityDetails implements UserDetails
 {
-    
+
     private Customer customer;
 
     public CustomerSecurityDetails(Customer customer)

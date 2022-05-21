@@ -1,4 +1,4 @@
-package com.store.videogames.services.interfaces;
+package com.store.videogames.service.interfaces;
 
 import com.store.videogames.repository.entites.Customer;
 

@@ -1,10 +1,10 @@
-package com.store.videogames.services;
+package com.store.videogames.service.customer;
 
-import com.store.videogames.common.PasswordEncoder;
-import com.store.videogames.common.WebsiteUrlGetterClass;
+import com.store.videogames.util.common.PasswordEncoder;
+import com.store.videogames.util.common.WebsiteUrlGetterClass;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
-import com.store.videogames.services.interfaces.ICustomerService;
+import com.store.videogames.service.interfaces.ICustomerService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,13 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class CustomerService implements ICustomerService
+public class CustomerServiceImpl implements ICustomerService
 {
     @Autowired
     CustomerRepository customerRepository;
 
     @Autowired
-    CustomerEmailService customerEmailService;
+    CustomerEmailServiceImpl customerEmailServiceImpl;
 
 
     public void saveCustomerIntoDB(Customer customer)
@@ -139,7 +139,7 @@ public class CustomerService implements ICustomerService
         saveCustomerIntoDB(customer);
         //This variable will store the website url and send it to send Verification Email function
         String websiteUrl = WebsiteUrlGetterClass.getSiteURL(httpServletRequest);
-        customerEmailService.sendVerificationEmail(customer, websiteUrl);
+        customerEmailServiceImpl.sendVerificationEmail(customer, websiteUrl);
         return true;
     }
 }

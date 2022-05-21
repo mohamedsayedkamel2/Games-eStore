@@ -1,4 +1,4 @@
-package com.store.videogames.services;
+package com.store.videogames.service.customer;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
@@ -13,9 +13,9 @@ import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
 @Service
-public class CustomerEmailService
+public class CustomerEmailServiceImpl
 {
-    //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerService
+    //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerServiceImpl
     @Autowired
     CustomerRepository customerRepository;
 

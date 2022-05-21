@@ -37,9 +37,6 @@ tr:nth-child(even) {
     </tr>
     <tr th:each="videogame : ${videogames}">
         <td th:text="${videogame.gameName}"></td>
-        <td th:text="${videogame.videogamePlatforms}"></td>
-        <td th:text="${videogame.price}"></td>
-        <td th:text="${videogame.quantity != 0} ? ${videogame.quantity} : 'Not avaliable'"></td>
         <td th:text="${videogame.developer}"></td>
         <td th:text="${videogame.publisher}"></td>
         <td th:text="${videogame.releaseDate}"></td>

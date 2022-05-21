@@ -1,4 +1,4 @@
-package com.store.videogames.common;
+package com.store.videogames.util.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

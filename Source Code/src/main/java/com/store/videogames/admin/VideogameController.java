@@ -1,8 +1,8 @@
-package com.store.videogames.controllers;
+package com.store.videogames.admin;
 
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
-import com.store.videogames.services.VideogameService;
+import com.store.videogames.service.VideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,10 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/videogame")
 public class VideogameController
 {
     @Autowired

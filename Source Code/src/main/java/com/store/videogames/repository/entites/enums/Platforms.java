@@ -20,7 +20,6 @@ public enum Platforms
 
     public String getPlatformName()
     {
-        System.out.println(platformName);
         return platformName;
     }
 

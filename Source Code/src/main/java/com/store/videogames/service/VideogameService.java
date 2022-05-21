@@ -1,8 +1,8 @@
-package com.store.videogames.services;
+package com.store.videogames.service;
 
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.VideogameRepository;
-import com.store.videogames.services.interfaces.IVideogameService;
+import com.store.videogames.service.interfaces.IVideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

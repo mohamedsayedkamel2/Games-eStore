@@ -1,6 +1,6 @@
 package com.store.videogames.config;
 
-import com.store.videogames.common.PasswordEncoder;
+import com.store.videogames.util.common.PasswordEncoder;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
