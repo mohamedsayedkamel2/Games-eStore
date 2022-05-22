@@ -1,19 +1,22 @@
-package com.store.videogames.config;
+package com.store.videogames.config.security;
 
 import com.store.videogames.repository.entites.Customer;
+import com.store.videogames.repository.entites.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
-public class CustomerSecurityDetails implements UserDetails
+public class CustomerDetailsImpl implements UserDetails
 {
 
     private Customer customer;
 
-    public CustomerSecurityDetails(Customer customer)
+    public CustomerDetailsImpl(Customer customer)
     {
         this.customer = customer;
     }
@@ -21,8 +24,13 @@ public class CustomerSecurityDetails implements UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(customer.getRole());
-        return Arrays.asList(simpleGrantedAuthority);
+        List<Roles>roles = customer.getRoles();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (Roles role : roles)
+        {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
     }
 
     @Override

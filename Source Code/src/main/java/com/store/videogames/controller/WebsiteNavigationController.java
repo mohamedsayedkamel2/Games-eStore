@@ -1,6 +1,6 @@
 package com.store.videogames.controller;
 
-import com.store.videogames.service.VideogameService;
+import com.store.videogames.service.videogame.VideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

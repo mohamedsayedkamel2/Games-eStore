@@ -22,25 +22,29 @@ tr:nth-child(even) {
     </style>
 </head>
 <body>
-<p>Hello [[${#request.userPrincipal.principal.customer.username}]]</p>
-<a href="#" th:href="@{/userProfile}" sec:authentication="principal.customer.username" target="_blank"></a>
+<p>Hello [[${#request.userPrincipal.principal.username}]]</p>
+<a href="#" th:href="@{/userProfile}" sec:authentication="principal.username" target="_blank"></a>
 <table>
     <tr>
         <th>Game Name</th>
-        <th>Platforms</th>
+        <th>Platform</th>
         <th>Price</th>
-        <th>Quantity</th>
+        <th>Release Date</th>
         <th>Developer</th>
         <th>Publisher</th>
-        <th>Release Date</th>
         <th>Description</th>
+        <th>Buy link</th>
     </tr>
     <tr th:each="videogame : ${videogames}">
         <td th:text="${videogame.gameName}"></td>
+        <td th:text="${videogame.platform.name}"></td>
+        <td th:text="${videogame.price}"></td>
+        <td th:text="${videogame.releaseDate}"></td>
         <td th:text="${videogame.developer}"></td>
         <td th:text="${videogame.publisher}"></td>
-        <td th:text="${videogame.releaseDate}"></td>
         <td th:text="${videogame.description}"></td>
+        <td><a href="#" th:href="@{/videogame/{id}(id=${videogame.id})}">Buy</a></td>
+        </block>
     </tr>
 </table>
 </form>

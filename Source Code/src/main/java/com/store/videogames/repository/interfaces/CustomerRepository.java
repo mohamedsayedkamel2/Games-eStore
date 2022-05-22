@@ -1,6 +1,7 @@
 package com.store.videogames.repository.interfaces;
 
 import com.store.videogames.repository.entites.Customer;
+import com.store.videogames.repository.entites.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,7 +35,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>
     List<Customer> getCustomerByStreetName(String streetName);
     List<Customer> getCustomerByZipCode(int zipCode);
     List<Customer> getCustomerByRegistrationDate(LocalDate registrationDate);
-    List<Customer> getCustomerByRole(String role);
+//    List<Customer> getCustomerByRoles(List<Roles> roles);
     List<Customer> getCustomerByEnabled(Boolean isEnabled);
     List<Customer> getCustomerByRegistrationTime(LocalTime registrationTime);
 

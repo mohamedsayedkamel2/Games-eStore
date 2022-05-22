@@ -2,6 +2,7 @@ package com.store.videogames.repository.interfaces;
 
 import com.store.videogames.repository.entites.Videogame;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -21,4 +22,7 @@ public interface VideogameRepository extends JpaRepository<Videogame, Integer>
     List<Videogame> getVideogameBypublisher(String publisher);
     //This will return a list of videogames developed by a particular developer
     List<Videogame> getVideogameBydeveloper(String developer);
+
+    @Query(value = "SELECT v FROM Videogame v WHERE v.quantity != 0")
+    List<Videogame> getAllVideogames();
 }

@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -59,7 +58,6 @@ public class Videogame
     @NotNull
     private String description;
 
-    //private List<CustomerMoneyHistory> customerMoneyHistoryList;
 
     /*
     Setters and getters area

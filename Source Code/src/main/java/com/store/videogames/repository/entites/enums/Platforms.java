@@ -10,17 +10,17 @@ public enum Platforms
     XBOX_SERIES_X("Xbox Series X"), XBOX_SERIES_S("Xbox Series S"),
     SWITCH("NINTENDO SWITCH");
 
-    private String platformName;
+    private String name;
 
     Platforms(String enumName)
     {
-        this.platformName = enumName;
+        this.name = enumName;
     }
 
 
-    public String getPlatformName()
+    public String getName()
     {
-        return platformName;
+        return name;
     }
 
 }

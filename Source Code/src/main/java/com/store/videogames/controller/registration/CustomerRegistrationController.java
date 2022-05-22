@@ -1,5 +1,6 @@
 package com.store.videogames.controller.registration;
 
+import com.store.videogames.exceptions.exception.InvalidEmailException;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.service.customer.CustomerEmailServiceImpl;
 import com.store.videogames.service.customer.CustomerServiceImpl;
@@ -38,8 +39,7 @@ public class CustomerRegistrationController
     {
         if (bindingResult.hasErrors())
         {
-            System.out.println("Errors happend while binding");
-            return "redirect:/index";
+            throw new InvalidEmailException("Error");
         }
         if (customerServiceImpl.registerCustomer(customer, request) == true)
         {

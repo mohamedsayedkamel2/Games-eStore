@@ -1,5 +1,6 @@
-package com.store.videogames.config;
+package com.store.videogames.config.security;
 
+import com.store.videogames.exceptions.exception.CustomerNotFoundException;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class CustomerDetails implements UserDetailsService
+public class CustomerDetailsServiceImpl implements UserDetailsService
 {
     @Autowired
     private CustomerRepository customerRepository;
@@ -19,8 +20,8 @@ public class CustomerDetails implements UserDetailsService
 
         if (customer == null)
         {
-            throw new UsernameNotFoundException("Couldn't find the username");
+            throw new CustomerNotFoundException("Couldn't find the user");
         }
-        return new CustomerSecurityDetails(customer);
+        return new CustomerDetailsImpl(customer);
     }
 }

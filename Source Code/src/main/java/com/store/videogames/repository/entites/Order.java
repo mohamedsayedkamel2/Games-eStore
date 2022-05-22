@@ -30,6 +30,9 @@ public class Order
     @Column(name = "order_id")
     private Integer id;
 
+    @Column(name = "order_transaction")
+    private String orderTransaction;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -53,6 +56,14 @@ public class Order
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getOrderTransaction() {
+        return orderTransaction;
+    }
+
+    public void setOrderTransaction(String orderTransaction) {
+        this.orderTransaction = orderTransaction;
     }
 
     public Customer getCustomer() {

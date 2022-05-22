@@ -1,6 +1,6 @@
 package com.store.videogames.controller.login;
 
-import com.store.videogames.util.common.WebsiteUrlGetterClass;
+import com.store.videogames.util.common.WebsiteUrlGetter;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.service.customer.CustomerServiceImpl;
 import com.store.videogames.util.interfaces.EmailUtil;
@@ -36,7 +36,7 @@ public class ForgotPasswordController
         String email = request.getParameter("email");
         String token = RandomString.make(30);
         customerServiceImpl.updateResetPasswordToken(token, email);
-        String resetPasswordLink = WebsiteUrlGetterClass.getSiteURL(request) + "/reset_password?token=" + token;
+        String resetPasswordLink = WebsiteUrlGetter.getSiteURL(request) + "/reset_password?token=" + token;
         sendEmail(email, resetPasswordLink);
         System.out.println("Email sent successfuly");
         model.addAttribute("message", "We have sent a reset password link to your email. Please check.");

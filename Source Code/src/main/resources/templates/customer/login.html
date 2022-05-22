@@ -6,15 +6,15 @@
 </head>
 <body>
 <div th:if="${param.error}">Invalid email/password</div>
-<body>
+<div th:if="${message}">[[${error_message}]]</div>
 <form th:action="@{/login}" method="post">
     Email: <input type="email" name="username"><br>
     Password: <input type="password" name="password"><br>
     Remember me:  <input type="checkbox" name="remember-me"><br>
     <button type="submit">s</button>
 </form>
-<a th:href="@{/forgot_password}">Forgot your password?</a>
-<a th:href="@{/customer/register}">Register</a>
-</body>
+<a th:href="@{/forgot_password}">Forgot your password?</a><br>
+<a th:href="@{/customer/register}">Register</a><br>
+<a th:href="@{/oauth2/authorization/google}">Login with Google</a>
 </body>
 </html>

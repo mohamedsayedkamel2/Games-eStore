@@ -1,4 +1,4 @@
-package com.store.videogames.exceptions;
+package com.store.videogames.exceptions.exception;
 
 public class InvalidPasswordException extends RuntimeException
 {

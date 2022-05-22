@@ -1,11 +1,14 @@
 package com.store.videogames.repository.entites;
 
+import com.store.videogames.repository.entites.enums.AuthenticationProvider;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
+import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,9 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,7 +45,6 @@ public class Customer
     @Column(name = "last_name")
     private String lastName;
 
-    @Email
     @Column(name = "email", unique = true)
     @NotNull
     private String email;
@@ -53,9 +53,10 @@ public class Customer
     @NotNull
     private String password;
 
-    @Column(name = "role")
-    @NotNull
-    private String role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Roles>roles;
 
     @Column(name = "enabled")
     private boolean enabled;
@@ -69,7 +70,7 @@ public class Customer
     private String cityName;
 
     @Column(name = "balance")
-    private float userBalance;
+    private float balance;
 
     @Column(name = "street_name")
     @NotNull
@@ -99,6 +100,10 @@ public class Customer
 
     @Column(name = "email_verification_code", length = 60)
     private String emailVerificationCode;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthenticationProvider authenticationProvider;
 
     /*Setters and getters area*/
     public List<Videogame> getVideogameList()
@@ -142,14 +147,14 @@ public class Customer
         this.lastName = lastName;
     }
 
-    public float getUserBalance()
+    public float getBalance()
     {
-        return userBalance;
+        return balance;
     }
 
-    public void setUserBalance(float userBalance)
+    public void setBalance(float balance)
     {
-        this.userBalance = userBalance;
+        this.balance = balance;
     }
 
     public String getEmail() {
@@ -166,6 +171,16 @@ public class Customer
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Roles> getRoles()
+    {
+        return roles;
+    }
+
+    public void setRoles(List<Roles> roles)
+    {
+        this.roles = roles;
     }
 
     public String getCountryName() {
@@ -218,16 +233,6 @@ public class Customer
         this.registrationTime = registrationTime;
     }
 
-    public String getRole()
-    {
-        return role;
-    }
-
-    public void setRole(String role)
-    {
-        this.role = role;
-    }
-
     public boolean getEnabled()
     {
         return enabled;
@@ -263,6 +268,21 @@ public class Customer
         return Collections.unmodifiableList(ordersList);
     }
 
+    public AuthenticationProvider getAuthenticationProvider()
+    {
+        return authenticationProvider;
+    }
+
+    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider)
+    {
+        this.authenticationProvider = authenticationProvider;
+    }
+
+    public void addRole(Roles role)
+    {
+        this.roles.add(role);
+    }
+
     @Override
     public String toString()
     {
@@ -273,11 +293,11 @@ public class Customer
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
+                ", role='"  + '\'' +
                 ", enabled=" + enabled +
                 ", countryName='" + countryName + '\'' +
                 ", cityName='" + cityName + '\'' +
-                ", userBalance=" + userBalance +
+                ", userBalance=" + balance +
                 ", streetName='" + streetName + '\'' +
                 ", zipCode=" + zipCode +
                 ", registrationDate=" + registrationDate +

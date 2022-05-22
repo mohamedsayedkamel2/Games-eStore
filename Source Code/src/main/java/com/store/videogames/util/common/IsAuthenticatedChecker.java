@@ -4,7 +4,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public class IsAuthenticatedCheckerClass
+public class IsAuthenticatedChecker
 {
     public static boolean checkIfAuthenticated()
     {

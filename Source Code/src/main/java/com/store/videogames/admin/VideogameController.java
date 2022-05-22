@@ -2,7 +2,7 @@ package com.store.videogames.admin;
 
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
-import com.store.videogames.service.VideogameService;
+import com.store.videogames.service.videogame.VideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

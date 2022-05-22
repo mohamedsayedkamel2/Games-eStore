@@ -1,5 +1,7 @@
-package com.store.videogames.config;
+package com.store.videogames.config.security;
 
+import com.store.videogames.config.security.oAuth2.CustomAuth2UserService;
+import com.store.videogames.config.security.oAuth2.OAuth2SuccessfultHandler;
 import com.store.videogames.util.common.PasswordEncoder;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     DataSource dataSource;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    CustomAuth2UserService auth2UserService;
+    @Autowired
+    OAuth2SuccessfultHandler oAuth2SuccessfultHandler;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerDetails();
+        return new CustomerDetailsServiceImpl();
     }
 
     @Bean
@@ -61,13 +67,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 antMatchers("/customer/register").permitAll().
                 antMatchers("/forgot_password").permitAll().
                 antMatchers("/reset_password").permitAll().
-//                antMatchers("/verify").permitAll().
+                antMatchers("/verify").permitAll().
+                antMatchers("/verify/*").permitAll().
+                antMatchers("/oauth2/**").permitAll().
                 anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll().loginPage("/login").
                 usernameParameter("username").passwordParameter("password")
                 .permitAll().failureUrl("/login?error").defaultSuccessUrl("/").
-                and().logout().permitAll().
-                and().rememberMe().tokenRepository(persistentTokenRepository());
+                and().logout().logoutUrl("/logout").permitAll().
+                and().rememberMe().tokenRepository(persistentTokenRepository()).
+                and().oauth2Login().loginPage("/login").userInfoEndpoint().userService(auth2UserService).
+                and().successHandler(oAuth2SuccessfultHandler);
     }
 }

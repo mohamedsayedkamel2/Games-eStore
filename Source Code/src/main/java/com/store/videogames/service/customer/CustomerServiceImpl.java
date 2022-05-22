@@ -1,10 +1,12 @@
 package com.store.videogames.service.customer;
 
+import com.store.videogames.repository.entites.Roles;
+import com.store.videogames.repository.entites.enums.AuthenticationProvider;
+import com.store.videogames.repository.interfaces.RolesRepository;
 import com.store.videogames.util.common.PasswordEncoder;
-import com.store.videogames.util.common.WebsiteUrlGetterClass;
+import com.store.videogames.util.common.WebsiteUrlGetter;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
-import com.store.videogames.service.interfaces.ICustomerService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,89 +16,80 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomerServiceImpl implements ICustomerService
+public class CustomerServiceImpl
 {
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    CustomerEmailServiceImpl customerEmailServiceImpl;
+    private CustomerEmailServiceImpl customerEmailServiceImpl;
 
+    @Autowired
+    private RolesRepository rolesRepository;
 
     public void saveCustomerIntoDB(Customer customer)
     {
         customerRepository.save(customer);
     }
 
-    @Override
     public Customer getCustomerbyEmail(String email)
     {
         return customerRepository.getCustomerByEmail(email);
     }
 
-    @Override
     public Customer getCustomerByUsername(String username)
     {
         return customerRepository.getCustomerByUsername(username);
     }
 
-    @Override
     public List<Customer> getCustomersByCountryName(String countryName)
     {
         return customerRepository.getCustomerByCountryName(countryName);
     }
 
-    @Override
     public List<Customer> getCustomersByCityName(String cityName)
     {
         return customerRepository.getCustomerByCityName(cityName);
     }
 
-    @Override
     public List<Customer> getCustomersByStreetName(String streetName)
     {
         return customerRepository.getCustomerByStreetName(streetName);
     }
 
-    @Override
     public List<Customer> getCustomersByZipCode(int zipCode)
     {
         return customerRepository.getCustomerByZipCode(zipCode);
     }
 
-    @Override
     public List<Customer> getCustomersByRegistrationDate(LocalDate registrationDate)
     {
         return customerRepository.getCustomerByRegistrationDate(registrationDate);
     }
 
-    @Override
     public List<Customer> getCustomersByRegistrationTime(LocalTime registrationTime)
     {
         return customerRepository.getCustomerByRegistrationTime(registrationTime);
     }
 
-    @Override
-    public List<Customer> getCustomersByRole(String role)
-    {
-        return customerRepository.getCustomerByRole(role);
-    }
+//    public List<Customer> getCustomersByRole(List<Roles> roles)
+//    {
+//        return customerRepository.getCustomerByRoles(roles);
+//    }
 
-    @Override
     public List<Customer> getCustomersByEnabled(Boolean isEnabled)
     {
         return customerRepository.getCustomerByEnabled(isEnabled);
     }
 
-    @Override
     public Customer getCustomerByEmailVerificationCode(String EmailVerificationCode)
     {
         return customerRepository.getCustomerByEmailVerificationCode(EmailVerificationCode);
     }
-    @Override
     public Customer getCustomerByResetPasswordToken(String token)
     {
         return customerRepository.getCustomerByResetPasswordToken(token);
@@ -138,8 +131,37 @@ public class CustomerServiceImpl implements ICustomerService
         //We will store the user into  DB then we will send the user an email which contains the verification link
         saveCustomerIntoDB(customer);
         //This variable will store the website url and send it to send Verification Email function
-        String websiteUrl = WebsiteUrlGetterClass.getSiteURL(httpServletRequest);
+        String websiteUrl = WebsiteUrlGetter.getSiteURL(httpServletRequest);
         customerEmailServiceImpl.sendVerificationEmail(customer, websiteUrl);
         return true;
+    }
+
+    public void registerCustomerOAuth(String name, String email, AuthenticationProvider authenticationProvider)
+    {
+        Customer customer = new Customer();
+        customer.setFirstName(name);
+        customer.setLastName("");
+        customer.setEmail(email);
+        customer.setPassword("");
+        Roles role = rolesRepository.getRolesByName("USER");
+        List<Roles> rolesList = new ArrayList<>();
+        rolesList.add(role);
+        customer.setRoles(rolesList);
+        customer.setEnabled(true);
+        customer.setRegistrationDate(LocalDate.now());
+        customer.setRegistrationTime(LocalTime.now());
+        customer.setCountryName("");
+        customer.setCityName("");
+        customer.setStreetName("");
+        customer.setUsername("");
+        customer.setAuthenticationProvider(authenticationProvider);
+        customerRepository.save(customer);
+    }
+
+    public void updateCustomerOAuth(Customer customer, String name, AuthenticationProvider authenticationProvider)
+    {
+        customer.setFirstName(name);
+        customer.setAuthenticationProvider(authenticationProvider);
+        customerRepository.save(customer);
     }
 }

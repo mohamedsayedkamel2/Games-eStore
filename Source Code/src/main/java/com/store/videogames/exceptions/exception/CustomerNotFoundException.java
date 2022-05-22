@@ -1,4 +1,4 @@
-package com.store.videogames.exceptions;
+package com.store.videogames.exceptions.exception;
 
 public class CustomerNotFoundException extends RuntimeException
 {
@@ -16,4 +16,6 @@ public class CustomerNotFoundException extends RuntimeException
     {
         return message;
     }
+
+
 }
