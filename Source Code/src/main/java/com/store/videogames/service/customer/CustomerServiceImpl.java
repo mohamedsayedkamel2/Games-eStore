@@ -1,7 +1,10 @@
 package com.store.videogames.service.customer;
 
+import com.store.videogames.repository.entites.CustomerMoneyHistory;
+import com.store.videogames.repository.entites.Order;
 import com.store.videogames.repository.entites.Roles;
 import com.store.videogames.repository.entites.enums.AuthenticationProvider;
+import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
 import com.store.videogames.repository.interfaces.RolesRepository;
 import com.store.videogames.util.common.PasswordEncoder;
 import com.store.videogames.util.common.WebsiteUrlGetter;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,6 +34,9 @@ public class CustomerServiceImpl
 
     @Autowired
     private RolesRepository rolesRepository;
+
+    @Autowired
+    private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
 
     public void saveCustomerIntoDB(Customer customer)
     {
@@ -95,6 +102,11 @@ public class CustomerServiceImpl
         return customerRepository.getCustomerByResetPasswordToken(token);
     }
 
+    public CustomerMoneyHistory getMoneyHistoryByOrder(Order order)
+    {
+        return customerMoneyHistoryRepository.getCustomerMoneyHistoryByOrder(order);
+    }
+
     /*Start of forgot-password feature code*/
     public void updateResetPasswordToken(String token, String email)
     {
@@ -116,6 +128,7 @@ public class CustomerServiceImpl
     /*End of forget-password feature code*/
 
     //Customer registration process function
+    @Transactional
     public boolean registerCustomer(Customer customer, HttpServletRequest httpServletRequest) throws MessagingException, UnsupportedEncodingException
     {
         //First we will set the user registration date and time
@@ -128,6 +141,11 @@ public class CustomerServiceImpl
         customer.setEmailVerificationCode(randomCode);
         //Fourth step mark the user as NOT enabled because the user didn't verfiy his email
         customer.setEnabled(false);
+        //Fifth step set default user role to USER
+        Roles role = rolesRepository.getRolesByName("USER");
+        List<Roles> roles = new ArrayList<>();
+        roles.add(role);
+        customer.setRoles(roles);
         //We will store the user into  DB then we will send the user an email which contains the verification link
         saveCustomerIntoDB(customer);
         //This variable will store the website url and send it to send Verification Email function

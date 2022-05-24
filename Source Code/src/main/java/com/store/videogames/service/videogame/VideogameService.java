@@ -3,6 +3,9 @@ package com.store.videogames.service.videogame;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.VideogameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,9 +22,10 @@ public class VideogameService
         videogameRepository.save(videogame);
     }
 
-    public List<Videogame> retriveAllVideogames()
+    public Page<Videogame> retriveAllVideogames(int currentPage)
     {
-        return videogameRepository.getAllVideogames();
+        Pageable pageable = PageRequest.of(currentPage, 3);
+        return videogameRepository.findAll(pageable);
     }
 
     public void updateVideogame(Videogame videogame)
@@ -52,5 +56,10 @@ public class VideogameService
     public List<Videogame> getVideogameBydeveloper(String developer)
     {
         return videogameRepository.getVideogameBydeveloper(developer);
+    }
+
+    public List<Videogame> searchforVideogame(String keyword)
+    {
+        return videogameRepository.videogamesSearch(keyword);
     }
 }

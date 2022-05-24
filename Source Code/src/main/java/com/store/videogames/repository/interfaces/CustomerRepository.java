@@ -1,7 +1,6 @@
 package com.store.videogames.repository.interfaces;
 
 import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.entites.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

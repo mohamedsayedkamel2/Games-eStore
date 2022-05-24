@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Repository
 public interface VideogameRepository extends JpaRepository<Videogame, Integer>
 {
@@ -25,4 +26,7 @@ public interface VideogameRepository extends JpaRepository<Videogame, Integer>
 
     @Query(value = "SELECT v FROM Videogame v WHERE v.quantity != 0")
     List<Videogame> getAllVideogames();
+
+    @Query("SELECT v FROM Videogame v WHERE v.gameName LIKE %?1%")
+    List<Videogame> videogamesSearch(String keyword);
 }

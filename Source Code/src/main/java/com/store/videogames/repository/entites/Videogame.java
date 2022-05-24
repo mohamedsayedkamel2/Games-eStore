@@ -58,6 +58,8 @@ public class Videogame
     @NotNull
     private String description;
 
+//    @Column(name = "digital_avaliable")
+//    private boolean isDigitallyAvaliable;
 
     /*
     Setters and getters area
@@ -152,6 +154,16 @@ public class Videogame
     {
         this.description = description;
     }
+
+//    public boolean isDigitallyAvaliable()
+//    {
+//        return isDigitallyAvaliable;
+//    }
+//
+//    public void setDigitallyAvaliable(boolean digitallyAvaliable)
+//    {
+//        isDigitallyAvaliable = digitallyAvaliable;
+//    }
 
     @Override
     public String toString()

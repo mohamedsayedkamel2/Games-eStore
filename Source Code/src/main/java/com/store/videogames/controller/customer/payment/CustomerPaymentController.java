@@ -2,9 +2,10 @@ package com.store.videogames.controller.customer.payment;
 
 import com.store.videogames.config.security.CustomerDetailsImpl;
 import com.store.videogames.repository.entites.Customer;
+import com.store.videogames.repository.entites.OrderedProduct;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.OrderRepository;
-import com.store.videogames.service.customer.CustomerPaymentServiceImpl;
+import com.store.videogames.service.customer.CustomerPaymentService;
 import com.store.videogames.service.customer.CustomerServiceImpl;
 import com.store.videogames.service.videogame.VideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.mail.MessagingException;
@@ -29,7 +31,7 @@ public class CustomerPaymentController
     @Autowired
     CustomerServiceImpl customerServiceImpl;
     @Autowired
-    CustomerPaymentServiceImpl customerPaymentService;
+    CustomerPaymentService customerPaymentService;
 
     @GetMapping("/videogame/{id}")
     String getGamePaymentPage(@PathVariable("id") int id, Model model)
@@ -46,7 +48,8 @@ public class CustomerPaymentController
 
     @PostMapping("/videogame/buy")
     @ResponseBody
-    String buyVideogameProcess(@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl, @ModelAttribute("videogame") Videogame videogame) throws MessagingException
+    String buyVideogameProcess(@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl,
+                               @ModelAttribute("videogame") Videogame videogame) throws MessagingException
     {
         Customer customer = customerDetailsImpl.getCustomer();
         Videogame videogame1 = videogameService.getVideogameById(videogame.getId());
@@ -55,11 +58,7 @@ public class CustomerPaymentController
             return "Videogame object is not found";
         }
         float videogamePrice = videogame.getQuantity() * videogame1.getPrice();
-        boolean isPaymentSuccessful = false;
-        if (customerPaymentService.isBalanceSufficent(videogamePrice,customer.getBalance()))
-        {
-            isPaymentSuccessful = customerPaymentService.buyProduct(customer, videogame.getQuantity(), videogamePrice, videogame1);
-        }
+        boolean isPaymentSuccessful = isPaymentSuccessful = customerPaymentService.buyGame(customer, videogame.getQuantity(), videogamePrice, videogame1, false);
         if (isPaymentSuccessful == false)
         {
             return "failure";

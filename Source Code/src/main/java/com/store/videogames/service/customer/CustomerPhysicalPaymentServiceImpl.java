@@ -6,10 +6,12 @@ import com.store.videogames.repository.entites.Order;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
 import com.store.videogames.repository.interfaces.OrderRepository;
+import com.store.videogames.service.customer.interfaces.ICustomerPaymentSerivce;
 import com.store.videogames.service.videogame.VideogameService;
 import com.store.videogames.util.interfaces.EmailUtil;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -19,7 +21,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
-public class CustomerPaymentServiceImpl
+@Primary
+public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSerivce
 {
     @Autowired
     private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
@@ -32,22 +35,11 @@ public class CustomerPaymentServiceImpl
     @Autowired
     EmailUtil emailUtil;
 
-    public CustomerMoneyHistory getMoneyHistoryByOrder(Order order)
-    {
-        return customerMoneyHistoryRepository.getCustomerMoneyHistoryByOrder(order);
-    }
-
-
-    /**
-     * @param customer is the customer who wants to buy the videogame
-     * @param quantity is the quantity of the game the customer wants to buy
-     * @param overallPrice price is the total price which is the videogame price * quantity
-     * @param purchasedVideogame is the videogame the customer wants to buy
-     */
+    @Override
     @Transactional
-    public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame purchasedVideogame) throws MessagingException
+    public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException
     {
-        if (purchasedVideogame.getQuantity() == 0)
+        if (videogame.getQuantity() == 0)
         {
             return false;
         }
@@ -57,22 +49,24 @@ public class CustomerPaymentServiceImpl
         float newUserBalance = customer.getBalance() - overallPrice;
         customer.setBalance(newUserBalance);
         //store the new avaliable quntity of the videogame
-        int newQuantity = purchasedVideogame.getQuantity() - quantity;
+        int newQuantity = videogame.getQuantity() - quantity;
         //update the avaliable quantity of the videogame
-        purchasedVideogame.setQuantity(newQuantity);
-        customer.addVideogame(purchasedVideogame);
+        videogame.setQuantity(newQuantity);
+        customer.addVideogame(videogame);
         //update the customer record in the databse with the new data
         customerService.saveCustomerIntoDB(customer);
         //update the videogame record in the database with the new data
-        videogameService.updateVideogame(purchasedVideogame);
+        videogameService.updateVideogame(videogame);
         //create an order and a history record of the user balance before and after the payment
-        Order order = createOrder(customer,quantity,purchasedVideogame);
+        Order order = createOrder(customer,quantity,videogame);
         moneyHistoryRecord(order, oldCustomerBalance,newUserBalance);
         sendOrderMail(order);
         return true;
     }
+
+    @Override
     @Transactional
-    Order createOrder(Customer customer, int quantity, Videogame videogame)
+    public Order createOrder(Customer customer, int quantity, Videogame videogame)
     {
         Order order = new Order();
         order.setOrderTransaction(RandomString.make(64));
@@ -84,8 +78,10 @@ public class CustomerPaymentServiceImpl
         orderRepository.save(order);
         return order;
     }
+
+    @Override
     @Transactional
-    void moneyHistoryRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder)
+    public void moneyHistoryRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder)
     {
         CustomerMoneyHistory customerMoneyHistory = new CustomerMoneyHistory();
         customerMoneyHistory.setOrder(order);
@@ -94,17 +90,8 @@ public class CustomerPaymentServiceImpl
         customerMoneyHistoryRepository.save(customerMoneyHistory);
     }
 
-    public boolean isBalanceSufficent(float videogamePrice, float customerBalance)
-    {
-        if (customerBalance < videogamePrice)
-        {
-            System.out.println("The user balance isn't enough");
-            return false;
-        }
-        return true;
-    }
-    @Transactional
-    void sendOrderMail(Order order) throws MessagingException
+    @Override
+    public void sendOrderMail(Order order) throws MessagingException
     {
         String body = "The game name is " + order.getVideogame().getGameName() + " The amount is " + order.getQuantity()
                 + " The date is " + order.getPurchaseDate() + " The time is " + order.getPurchaseTime().format(DateTimeFormatter.ISO_LOCAL_TIME) + " Order Id is "
