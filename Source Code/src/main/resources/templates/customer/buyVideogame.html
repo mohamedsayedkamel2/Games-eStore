@@ -10,9 +10,11 @@
     <input th:field="*{id}" hidden>
     Game name: <p th:text="*{gameName}"></p><br>
     Game price: <p th:text="*{price}"></p><br>
-    Your balance: is [[${#request.userPrincipal.principal.customer.balance}]]
-    Game quantity: <input type="number" min="1" th:max="*{quantity}" th:field="*{quantity}">
-    <button type="submit">Sumbit</button>
+    Game quantity: <input type="number" min="1" th:max="*{quantity}" th:field="*{quantity}"><br>
+    <span th:if="*{isDigitallyAvaliable == true}">
+        <input type="radio" name="digital"/>Choose this option if you want a digital copy of the game<br>
+    </span>
+    <button type="submit">Pay Via PayPal</button>
 </form>
 </body>
 </html>

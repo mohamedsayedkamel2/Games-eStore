@@ -49,7 +49,7 @@ public class CustomerPaymentController
     @PostMapping("/videogame/buy")
     @ResponseBody
     String buyVideogameProcess(@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl,
-                               @ModelAttribute("videogame") Videogame videogame) throws MessagingException
+                               @ModelAttribute("videogame") Videogame videogame, @RequestParam("digital")boolean isDigtial) throws MessagingException
     {
         Customer customer = customerDetailsImpl.getCustomer();
         Videogame videogame1 = videogameService.getVideogameById(videogame.getId());
@@ -58,7 +58,7 @@ public class CustomerPaymentController
             return "Videogame object is not found";
         }
         float videogamePrice = videogame.getQuantity() * videogame1.getPrice();
-        boolean isPaymentSuccessful = isPaymentSuccessful = customerPaymentService.buyGame(customer, videogame.getQuantity(), videogamePrice, videogame1, false);
+        boolean isPaymentSuccessful = isPaymentSuccessful = customerPaymentService.buyGame(customer, videogame.getQuantity(), videogamePrice, videogame1, isDigtial);
         if (isPaymentSuccessful == false)
         {
             return "failure";
