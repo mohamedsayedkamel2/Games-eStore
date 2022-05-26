@@ -53,6 +53,9 @@ Total items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]<br
         <a th:href="@{'/' + ${i}}">[[${i}]]</a>
     </span>
 </form>
+<form th:action="@{/logout}" method="post" name="logoutform">
+    <input type="submit" value="Logout" />
+</form>
 </body>
 </html>
 <!--Create a videogame link: <a href="#" th:href="@{/videogame/add}" target="_blank">Create a videogame</a>-->

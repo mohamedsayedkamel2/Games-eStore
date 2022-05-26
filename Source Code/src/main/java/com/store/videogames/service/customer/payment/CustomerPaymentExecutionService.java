@@ -1,4 +1,4 @@
-package com.store.videogames.service.customer;
+package com.store.videogames.service.customer.payment;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.Videogame;
@@ -10,17 +10,16 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 @Service
-public class CustomerPaymentService
+public class CustomerPaymentExecutionService
 {
     @Autowired
     CustomerPhysicalPaymentServiceImpl customerPhysicalPaymentService;
     @Autowired
     CustomerDigitalPaymentServiceImpl customerDigitalPaymentService;
-
     @Autowired
     ICustomerPaymentSerivce customerPaymentSerivce;
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public boolean buyGame(Customer customer, int quantity, float overallPrice, Videogame videogame, boolean isDigitalOrder) throws MessagingException
     {
         checkIfDigital(isDigitalOrder);

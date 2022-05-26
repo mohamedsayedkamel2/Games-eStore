@@ -1,5 +1,7 @@
 package com.store.videogames.repository.entites;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,9 +1,10 @@
-package com.store.videogames.controller.registration;
+package com.store.videogames.controller.customer.registration;
 
 import com.store.videogames.exceptions.exception.InvalidEmailException;
 import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.service.customer.CustomerEmailServiceImpl;
-import com.store.videogames.service.customer.CustomerServiceImpl;
+import com.store.videogames.service.customer.account.CustomerEmailService;
+import com.store.videogames.service.customer.CustomerService;
+import com.store.videogames.service.customer.account.CustomerRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,12 @@ import java.io.UnsupportedEncodingException;
 public class CustomerRegistrationController 
 {
     @Autowired
-    CustomerEmailServiceImpl customerEmailServiceImpl;
-
+    private CustomerService customerService;
     @Autowired
-    CustomerServiceImpl customerServiceImpl;
+    private CustomerRegistrationService customerRegistrationService;
+    @Autowired
+    private CustomerEmailService customerEmailService;
+
 
     @GetMapping("/customer/register")
     public String getNewCustomerPage(@ModelAttribute("customer") Customer customer)
@@ -41,7 +44,7 @@ public class CustomerRegistrationController
         {
             throw new InvalidEmailException("Error");
         }
-        if (customerServiceImpl.registerCustomer(customer, request) == true)
+        if (customerRegistrationService.registerCustomer(customer, request) == true)
         {
             System.out.println("Successfuly registerting");
             return "/customer/login";
@@ -53,7 +56,7 @@ public class CustomerRegistrationController
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code)
     {
-        if (customerEmailServiceImpl.verify(code))
+        if (customerEmailService.verify(code))
         {
             return "verify_success";
         }

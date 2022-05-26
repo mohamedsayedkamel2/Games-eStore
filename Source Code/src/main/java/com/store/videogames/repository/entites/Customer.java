@@ -3,8 +3,8 @@ package com.store.videogames.repository.entites;
 import com.store.videogames.repository.entites.enums.AuthenticationProvider;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
-import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,9 +25,10 @@ import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
-@Entity
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Customer implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -36,25 +38,24 @@ public class Customer implements Serializable
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @NotNull
-    @Column(name = "username", unique = true)
-    private String username;
-
     @Column(name = "first_name")
     @NotNull
     private String firstName;
 
-    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email", unique = true)
     @NotNull
+    @Email
     private String email;
 
     @Column(name = "password")
     @NotNull
     private String password;
+
+    @Column(name = "username", unique = true)
+    private String username;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -65,22 +66,18 @@ public class Customer implements Serializable
     private boolean enabled;
 
     @Column(name = "country")
-    @NotNull
     private String countryName;
 
     @Column(name = "city")
-    @NotNull
     private String cityName;
 
     @Column(name = "balance")
     private float balance;
 
     @Column(name = "street_name")
-    @NotNull
     private String streetName;
 
     @Column(name = "zip_code")
-    @NotNull
     private int zipCode;
 
     @Column(name = "registration_date")
@@ -107,6 +104,9 @@ public class Customer implements Serializable
     @Enumerated(value = EnumType.STRING)
     @Column(name = "auth_provider")
     private AuthenticationProvider authenticationProvider;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    private List<DigitalVideogameCode> digitalVideogameCode;
 
     /*Setters and getters area*/
     public List<Videogame> getVideogameList()
@@ -284,6 +284,14 @@ public class Customer implements Serializable
     public void addRole(Roles role)
     {
         this.roles.add(role);
+    }
+
+    public List<DigitalVideogameCode> getDigitalVideogameCode() {
+        return digitalVideogameCode;
+    }
+
+    public void setDigitalVideogameCode(List<DigitalVideogameCode> digitalVideogameCode) {
+        this.digitalVideogameCode = digitalVideogameCode;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.store.videogames.admin;
+package com.store.videogames.admin.controller.videogame;
 
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
@@ -10,9 +10,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class VideogameController
+@RequestMapping("/admin/videogame")
+public class VideogameManagementController
 {
     @Autowired
     VideogameService videogameService;

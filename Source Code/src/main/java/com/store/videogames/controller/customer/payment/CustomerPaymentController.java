@@ -2,11 +2,8 @@ package com.store.videogames.controller.customer.payment;
 
 import com.store.videogames.config.security.CustomerDetailsImpl;
 import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.entites.OrderedProduct;
 import com.store.videogames.repository.entites.Videogame;
-import com.store.videogames.repository.interfaces.OrderRepository;
-import com.store.videogames.service.customer.CustomerPaymentService;
-import com.store.videogames.service.customer.CustomerServiceImpl;
+import com.store.videogames.service.customer.payment.CustomerPaymentExecutionService;
 import com.store.videogames.service.videogame.VideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,11 +24,7 @@ public class CustomerPaymentController
     @Autowired
     VideogameService videogameService;
     @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    CustomerServiceImpl customerServiceImpl;
-    @Autowired
-    CustomerPaymentService customerPaymentService;
+    CustomerPaymentExecutionService customerPaymentExecutionService;
 
     @GetMapping("/videogame/{id}")
     String getGamePaymentPage(@PathVariable("id") int id, Model model)
@@ -49,7 +42,7 @@ public class CustomerPaymentController
     @PostMapping("/videogame/buy")
     @ResponseBody
     String buyVideogameProcess(@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl,
-                               @ModelAttribute("videogame") Videogame videogame, @RequestParam("digital")boolean isDigtial) throws MessagingException
+                               @ModelAttribute("videogame") Videogame videogame, @RequestParam(value = "digital", required = false)boolean isDigtial) throws MessagingException
     {
         Customer customer = customerDetailsImpl.getCustomer();
         Videogame videogame1 = videogameService.getVideogameById(videogame.getId());
@@ -58,7 +51,7 @@ public class CustomerPaymentController
             return "Videogame object is not found";
         }
         float videogamePrice = videogame.getQuantity() * videogame1.getPrice();
-        boolean isPaymentSuccessful = isPaymentSuccessful = customerPaymentService.buyGame(customer, videogame.getQuantity(), videogamePrice, videogame1, isDigtial);
+        boolean isPaymentSuccessful = customerPaymentExecutionService.buyGame(customer, videogame.getQuantity(), videogamePrice, videogame1, isDigtial);
         if (isPaymentSuccessful == false)
         {
             return "failure";

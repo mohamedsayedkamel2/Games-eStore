@@ -1,6 +1,9 @@
 package com.store.videogames.config.security.oAuth2;
 
 import com.store.videogames.repository.entites.Customer;
+import com.store.videogames.service.customer.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -10,6 +13,10 @@ import java.util.Map;
 public class CustomAuth2Customer implements OAuth2User
 {
     private OAuth2User oAuth2User;
+
+    @Autowired
+    private CustomerService customerService;
+
     CustomAuth2Customer(OAuth2User oAuth2User)
     {
         this.oAuth2User = oAuth2User;
@@ -40,6 +47,12 @@ public class CustomAuth2Customer implements OAuth2User
 
     public String getUsername()
     {
-        return oAuth2User.getAttribute("name");
+        return oAuth2User.getAttribute("username");
+    }
+
+    @Bean
+    public Customer getCustomer()
+    {
+        return customerService.getCustomerbyEmail(getEmail());
     }
 }

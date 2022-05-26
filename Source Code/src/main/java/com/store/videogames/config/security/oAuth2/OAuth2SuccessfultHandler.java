@@ -2,7 +2,8 @@ package com.store.videogames.config.security.oAuth2;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.enums.AuthenticationProvider;
-import com.store.videogames.service.customer.CustomerServiceImpl;
+import com.store.videogames.service.customer.CustomerService;
+import com.store.videogames.service.customer.account.CustomerRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -17,7 +18,9 @@ import java.io.IOException;
 public class OAuth2SuccessfultHandler extends SimpleUrlAuthenticationSuccessHandler
 {
     @Autowired
-    CustomerServiceImpl customerService;
+    private CustomerService customerService;
+    @Autowired
+    private CustomerRegistrationService customerRegistrationService;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException
     {
@@ -27,11 +30,11 @@ public class OAuth2SuccessfultHandler extends SimpleUrlAuthenticationSuccessHand
         Customer customer = customerService.getCustomerbyEmail(email);
         if (customer == null)
         {
-            customerService.registerCustomerOAuth(email, name, AuthenticationProvider.GOOGLE);
+            customerRegistrationService.registerCustomerOAuth(email, name, AuthenticationProvider.GOOGLE);
         }
         else
         {
-            customerService.updateCustomerOAuth(customer, name, AuthenticationProvider.GOOGLE);
+            customerRegistrationService.updateCustomerOAuth(customer, name, AuthenticationProvider.GOOGLE);
         }
         super.onAuthenticationSuccess(request, response, authentication);
     }

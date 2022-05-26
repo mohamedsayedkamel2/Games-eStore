@@ -1,6 +1,8 @@
 package com.store.videogames.repository.entites;
 
 
+import org.springframework.data.redis.core.RedisHash;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,13 +53,5 @@ public class CustomerMoneyHistory
         this.moneyAfterOrder = moneyAfterOrder;
     }
 
-    @Override
-    public String toString() {
-        return "CustomerMoneyHistory{" +
-                "id=" + id +
-                ", order=" + order +
-                ", moneyBeforeOrder=" + moneyBeforeOrder +
-                ", moneyAfterOrder=" + moneyAfterOrder +
-                '}';
-    }
+
 }

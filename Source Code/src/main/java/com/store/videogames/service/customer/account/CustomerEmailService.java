@@ -1,4 +1,4 @@
-package com.store.videogames.service.customer;
+package com.store.videogames.service.customer.account;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 
 @Service
-public class CustomerEmailServiceImpl
+//If any exception happens just rollback
+@Transactional(rollbackOn = Exception.class)
+public class CustomerEmailService
 {
-    //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerServiceImpl
+    //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerService
     @Autowired
     CustomerRepository customerRepository;
 

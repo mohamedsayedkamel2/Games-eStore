@@ -1,4 +1,4 @@
-package com.store.videogames.controller.login;
+package com.store.videogames.controller.customer.login;
 
 import com.store.videogames.util.common.IsAuthenticatedChecker;
 import org.springframework.stereotype.Controller;

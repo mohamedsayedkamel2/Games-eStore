@@ -1,9 +1,12 @@
 package com.store.videogames.repository.interfaces;
 
 import com.store.videogames.repository.entites.Videogame;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,7 +28,7 @@ public interface VideogameRepository extends JpaRepository<Videogame, Integer>
     List<Videogame> getVideogameBydeveloper(String developer);
 
     @Query(value = "SELECT v FROM Videogame v WHERE v.quantity != 0")
-    List<Videogame> getAllVideogames();
+    Page<Videogame> getAllGames(Pageable pageable);
 
     @Query("SELECT v FROM Videogame v WHERE v.gameName LIKE %?1%")
     List<Videogame> videogamesSearch(String keyword);

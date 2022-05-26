@@ -1,4 +1,4 @@
-package com.store.videogames.service.customer;
+package com.store.videogames.service.customer.payment;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.CustomerMoneyHistory;
@@ -6,6 +6,7 @@ import com.store.videogames.repository.entites.Order;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
 import com.store.videogames.repository.interfaces.OrderRepository;
+import com.store.videogames.service.customer.CustomerService;
 import com.store.videogames.service.customer.interfaces.ICustomerPaymentSerivce;
 import com.store.videogames.service.videogame.VideogameService;
 import com.store.videogames.util.interfaces.EmailUtil;
@@ -22,12 +23,13 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 @Primary
+@Transactional(rollbackOn = Exception.class)
 public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSerivce
 {
     @Autowired
     private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
     @Autowired
-    CustomerServiceImpl customerService;
+    CustomerService customerService;
     @Autowired
     VideogameService videogameService;
     @Autowired
@@ -36,7 +38,6 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
     EmailUtil emailUtil;
 
     @Override
-    @Transactional
     public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException
     {
         if (videogame.getQuantity() == 0)
@@ -65,7 +66,6 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
     }
 
     @Override
-    @Transactional
     public Order createOrder(Customer customer, int quantity, Videogame videogame)
     {
         Order order = new Order();
@@ -80,7 +80,6 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
     }
 
     @Override
-    @Transactional
     public void moneyHistoryRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder)
     {
         CustomerMoneyHistory customerMoneyHistory = new CustomerMoneyHistory();
