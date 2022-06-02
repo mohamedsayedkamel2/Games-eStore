@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,13 +49,13 @@ public class CustomerDetailsImpl implements UserDetails
     @Override
     public boolean isAccountNonExpired()
     {
-        return customer.getEnabled();
+        return customer.isEnabled();
     }
 
     @Override
     public boolean isAccountNonLocked()
     {
-        return customer.getEnabled();
+        return customer.isEnabled();
     }
 
     @Override
@@ -66,7 +67,7 @@ public class CustomerDetailsImpl implements UserDetails
     @Override
     public boolean isEnabled()
     {
-        return customer.getEnabled();
+        return customer.isEnabled();
     }
 
     public Customer getCustomer()

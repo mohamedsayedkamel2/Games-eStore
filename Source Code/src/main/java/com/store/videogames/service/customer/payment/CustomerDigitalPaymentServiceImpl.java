@@ -2,9 +2,11 @@ package com.store.videogames.service.customer.payment;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.CustomerMoneyHistory;
+import com.store.videogames.repository.entites.DigitalVideogameCode;
 import com.store.videogames.repository.entites.Order;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
+import com.store.videogames.repository.interfaces.DigitalVideogameCodeRepository;
 import com.store.videogames.repository.interfaces.OrderRepository;
 import com.store.videogames.service.customer.CustomerService;
 import com.store.videogames.service.customer.interfaces.ICustomerPaymentSerivce;
@@ -18,52 +20,59 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @Transactional(rollbackOn = Exception.class)
 public class CustomerDigitalPaymentServiceImpl implements ICustomerPaymentSerivce
 {
     @Autowired
+    private DigitalVideogameCodeRepository digitalVideogameCodeRepository;
+    @Autowired
     private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
     @Autowired
-    VideogameService videogameService;
+    private VideogameService videogameService;
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
     @Autowired
-    EmailUtil emailUtil;
+    private EmailUtil emailUtil;
 
     @Override
     public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException
     {
-        if (videogame.getQuantity() == 0)
-        {
-            return false;
-        }
         //store old customer balance
         float oldCustomerBalance = customer.getBalance();
         //update the customer balance after buying the videogame
         float newUserBalance = customer.getBalance() - overallPrice;
         customer.setBalance(newUserBalance);
-        //store the new avaliable quntity of the videogame
-        int newQuantity = videogame.getQuantity() - quantity;
-        //update the avaliable quantity of the videogame
-        videogame.setQuantity(newQuantity);
         customer.addVideogame(videogame);
         //update the customer record in the databse with the new data
         customerService.saveCustomerIntoDB(customer);
         //update the videogame record in the database with the new data
-        videogameService.updateVideogame(videogame);
+        videogameService.storeNewVideogame(videogame);
+        List<DigitalVideogameCode> codesList = digitalVideogameCodeRepository.getCodes(videogame);
+        DigitalVideogameCode code;
+        try
+        {
+            code = codesList.get(0);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            return false;
+        }
         //create an order and a history record of the user balance before and after the payment
-        Order order = createOrder(customer,quantity,videogame);
+        Order order = createOrder(customer,quantity,videogame, code);
+        digitalVideogameCodeRepository.delete(code);
         moneyHistoryRecord(order, oldCustomerBalance,newUserBalance);
         sendOrderMail(order);
         return true;
     }
 
     @Override
-    public Order createOrder(Customer customer, int quantity, Videogame videogame)
+    public Order createOrder(Customer customer, int quantity, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
     {
         Order order = new Order();
         order.setOrderTransaction(RandomString.make(64));
@@ -72,6 +81,7 @@ public class CustomerDigitalPaymentServiceImpl implements ICustomerPaymentSerivc
         order.setPurchaseTime(LocalTime.now());
         order.setQuantity(quantity);
         order.setVideogame(videogame);
+        order.setDigitalVideogameCode(digitalVideogameCode.getGameCode());
         orderRepository.save(order);
         return order;
     }
@@ -89,8 +99,9 @@ public class CustomerDigitalPaymentServiceImpl implements ICustomerPaymentSerivc
     @Override
     public void sendOrderMail(Order order) throws MessagingException
     {
-        String body = "You have bought a digital game";
-        String subject = "Thanks " + order.getCustomer().getFirstName();
+        String subject =  "Thanks for buying " + order.getVideogame().getGameName();
+        String body = "The game code is: " + order.getDigitalVideogameCode() + "     You have bought the game at: " + order.getPurchaseDate()
+                +" The transaction ID is: " + order.getOrderTransaction();
         emailUtil.sendEmail(order.getCustomer().getEmail(), subject,body);
     }
 }

@@ -1,6 +1,7 @@
 package com.store.videogames.service.videogame;
 
 import com.store.videogames.repository.entites.Videogame;
+import com.store.videogames.repository.entites.enums.Platforms;
 import com.store.videogames.repository.interfaces.VideogameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -10,14 +11,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Transactional
 public class VideogameService implements Serializable
 {
     private static final long serialVersionUID = 1L;
+
     @Autowired
     VideogameRepository videogameRepository;
 
@@ -27,21 +31,16 @@ public class VideogameService implements Serializable
         videogameRepository.save(videogame);
     }
 
+
     @Cacheable("Videogame")
     public Page<Videogame> retriveAllVideogames(int currentPage)
     {
         Pageable pageable = PageRequest.of(currentPage - 1, 25);
-        return videogameRepository.getAllGames(pageable);
-    }
-
-    @CachePut("Videogame")
-    public void updateVideogame(Videogame videogame)
-    {
-        videogameRepository.save(videogame);
+        return videogameRepository.findAll(pageable);
     }
 
     @Cacheable("Videogame")
-    public Videogame getVideogameById(int videogameId)
+    public Videogame getVideogameById(Integer videogameId)
     {
         return videogameRepository.getById(videogameId);
     }
@@ -74,5 +73,12 @@ public class VideogameService implements Serializable
     public List<Videogame> searchforVideogame(String keyword)
     {
         return videogameRepository.videogamesSearch(keyword);
+    }
+
+    @Cacheable("Videogame")
+    public Page<Videogame> getVideogamesByPlatform(Platforms platform, int currentPage)
+    {
+        Pageable pageable = PageRequest.of(currentPage - 1, 5);
+        return videogameRepository.allGamesofAplatform(platform, pageable);
     }
 }

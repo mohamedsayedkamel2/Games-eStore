@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.transaction.Transactional;
+
+@Transactional
 public class CustomerDetailsServiceImpl implements UserDetailsService
 {
     @Autowired
@@ -20,7 +23,14 @@ public class CustomerDetailsServiceImpl implements UserDetailsService
 
         if (customer == null)
         {
-            throw new CustomerNotFoundException("Couldn't find the user");
+            try
+            {
+                throw new CustomerNotFoundException("Couldn't find the user");
+            }
+            catch (CustomerNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         return new CustomerDetailsImpl(customer);
     }

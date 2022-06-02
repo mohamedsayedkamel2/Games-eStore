@@ -1,13 +1,17 @@
 package com.store.videogames.service.customer;
 
+import com.store.videogames.exceptions.exception.CustomerNotFoundException;
 import com.store.videogames.repository.entites.CustomerMoneyHistory;
 import com.store.videogames.repository.entites.Order;
+import com.store.videogames.repository.entites.Roles;
 import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -21,6 +25,12 @@ public class CustomerService
     private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
 
     public void saveCustomerIntoDB(Customer customer)
+    {
+        customerRepository.save(customer);
+    }
+
+    @Transactional
+    public void updateCustomer(Customer customer)
     {
         customerRepository.save(customer);
     }
@@ -70,7 +80,7 @@ public class CustomerService
         return customerRepository.getCustomerByEnabled(isEnabled);
     }
 
-    public Customer getCustomerByEmailVerificationCode(String EmailVerificationCode)
+    public Customer getByEmailVerificationCode(String EmailVerificationCode)
     {
         return customerRepository.getCustomerByEmailVerificationCode(EmailVerificationCode);
     }
@@ -82,5 +92,54 @@ public class CustomerService
     public CustomerMoneyHistory getMoneyHistoryByOrder(Order order)
     {
         return customerMoneyHistoryRepository.getCustomerMoneyHistoryByOrder(order);
+    }
+
+    public List<Customer> getAll()
+    {
+        return customerRepository.findAll();
+    }
+
+    public boolean isEmailUnique(Integer id, String email)
+    {
+        Customer customer = customerRepository.getCustomerByEmail(email);
+        //If then customer is null then the email is avaliable if it's not NULL then the email is occuiped
+        if (customer == null)
+        {
+            return true;
+        }
+        boolean isNewCustomer = (id == null);
+        if (isNewCustomer == true)
+        {
+            //There is already a customer in this email
+            if (customer != null)
+            {
+                return false;
+            }
+            else
+            {
+                if (customer.getId() != id)
+                {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Customer getCustomerById(int id) throws CustomerNotFoundException
+    {
+        try
+        {
+            return customerRepository.getById(id);
+        }
+        catch(EntityNotFoundException exception)
+        {
+            throw new CustomerNotFoundException("The customer has not been found");
+        }
+    }
+
+    public void updateCustomerEnabled(int id, boolean newEnableStatus)
+    {
+        customerRepository.updateEnabledStatus(id,newEnableStatus);
     }
 }

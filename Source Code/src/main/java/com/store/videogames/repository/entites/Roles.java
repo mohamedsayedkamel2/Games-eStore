@@ -1,7 +1,5 @@
 package com.store.videogames.repository.entites;
 
-import org.springframework.data.redis.core.RedisHash;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,8 +15,11 @@ public class Roles
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 45)
+    @Column(name = "name", length = 40, nullable = false, unique = true)
     private String name;
+
+    @Column(length = 150, nullable = false)
+    private String description;
 
     public Roles()
     {}
@@ -36,5 +37,21 @@ public class Roles
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getName();
     }
 }

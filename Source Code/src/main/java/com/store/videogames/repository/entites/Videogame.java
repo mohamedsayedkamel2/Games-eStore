@@ -2,7 +2,10 @@ package com.store.videogames.repository.entites;
 
 import com.store.videogames.repository.entites.enums.Platforms;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,6 +24,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
+@ToString
 public class Videogame implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -41,9 +47,6 @@ public class Videogame implements Serializable
     @Column
     float price;
 
-    @Column
-    int quantity;
-
     @Column(name = "release_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
@@ -57,130 +60,6 @@ public class Videogame implements Serializable
     @NotNull
     private String developer;
 
-    @Column
-    @NotNull
-    private String description;
-
     @Column(name = "digital_avaliable")
     private boolean isDigitallyAvaliable;
-
-    /*
-    Setters and getters area
-    */
-
-    public Integer getId()
-    {
-        return id;
-    }
-
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
-    public String getGameName()
-    {
-        return gameName;
-    }
-
-    public void setGameName(String gameName)
-    {
-        this.gameName = gameName;
-    }
-
-    public Platforms getPlatform()
-    {
-        return platform;
-    }
-
-    public void setPlatform(Platforms platform)
-    {
-        this.platform = platform;
-    }
-
-    public float getPrice()
-    {
-        return price;
-    }
-
-    public void setPrice(float price)
-    {
-        this.price = price;
-    }
-
-    public int getQuantity()
-    {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity)
-    {
-        this.quantity = quantity;
-    }
-
-    public LocalDate getReleaseDate()
-    {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDate releaseDate)
-    {
-        this.releaseDate = releaseDate;
-    }
-
-    public String getPublisher()
-    {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher)
-    {
-        this.publisher = publisher;
-    }
-
-    public String getDeveloper()
-    {
-        return developer;
-    }
-
-    public void setDeveloper(String developer)
-    {
-        this.developer = developer;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public boolean isDigitallyAvaliable()
-    {
-        return isDigitallyAvaliable;
-    }
-
-    public void setDigitallyAvaliable(boolean digitallyAvaliable)
-    {
-        isDigitallyAvaliable = digitallyAvaliable;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Videogame{" +
-                "id=" + id +
-                ", gameName='" + gameName + '\'' +
-                ", platform=" + platform +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", releaseDate=" + releaseDate +
-                ", publisher='" + publisher + '\'' +
-                ", developer='" + developer + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

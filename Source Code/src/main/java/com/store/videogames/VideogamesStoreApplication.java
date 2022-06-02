@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-//@EnableCaching
+@EnableCaching
 public class VideogamesStoreApplication
 {
 	public static void main(String[] args)

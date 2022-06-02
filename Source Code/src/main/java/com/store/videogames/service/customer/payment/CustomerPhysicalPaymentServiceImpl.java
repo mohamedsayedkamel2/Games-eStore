@@ -2,6 +2,7 @@ package com.store.videogames.service.customer.payment;
 
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.CustomerMoneyHistory;
+import com.store.videogames.repository.entites.DigitalVideogameCode;
 import com.store.videogames.repository.entites.Order;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
@@ -40,33 +41,25 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
     @Override
     public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException
     {
-        if (videogame.getQuantity() == 0)
-        {
-            return false;
-        }
         //store old customer balance
         float oldCustomerBalance = customer.getBalance();
         //update the customer balance after buying the videogame
         float newUserBalance = customer.getBalance() - overallPrice;
         customer.setBalance(newUserBalance);
-        //store the new avaliable quntity of the videogame
-        int newQuantity = videogame.getQuantity() - quantity;
-        //update the avaliable quantity of the videogame
-        videogame.setQuantity(newQuantity);
         customer.addVideogame(videogame);
         //update the customer record in the databse with the new data
         customerService.saveCustomerIntoDB(customer);
         //update the videogame record in the database with the new data
-        videogameService.updateVideogame(videogame);
+        videogameService.storeNewVideogame(videogame);
         //create an order and a history record of the user balance before and after the payment
-        Order order = createOrder(customer,quantity,videogame);
+        Order order = createOrder(customer,quantity,videogame, null);
         moneyHistoryRecord(order, oldCustomerBalance,newUserBalance);
         sendOrderMail(order);
         return true;
     }
 
     @Override
-    public Order createOrder(Customer customer, int quantity, Videogame videogame)
+    public Order createOrder(Customer customer, int quantity, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
     {
         Order order = new Order();
         order.setOrderTransaction(RandomString.make(64));
@@ -92,10 +85,13 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
     @Override
     public void sendOrderMail(Order order) throws MessagingException
     {
-        String body = "The game name is " + order.getVideogame().getGameName() + " The amount is " + order.getQuantity()
-                + " The date is " + order.getPurchaseDate() + " The time is " + order.getPurchaseTime().format(DateTimeFormatter.ISO_LOCAL_TIME) + " Order Id is "
-                + order.getId();
-        String subject = "Thanks " + order.getCustomer().getFirstName();
+        String subject = "Thanks for buying " + order.getVideogame().getGameName();
+        String body = "The game will arrive bettwen 5 - 7 days " +
+                "Transaction ID: " + order.getOrderTransaction()  +
+                " Game name: " + order.getVideogame().getGameName() +
+                " Quantity: " + order.getQuantity() +
+                " Price: " + order.getVideogame().getPrice() +
+                " Purchase Date: " + order.getPurchaseDate();
         emailUtil.sendEmail(order.getCustomer().getEmail(), subject,body);
     }
 }

@@ -1,8 +1,10 @@
 package com.store.videogames.repository.interfaces;
 
 import com.store.videogames.repository.entites.Videogame;
+import com.store.videogames.repository.entites.enums.Platforms;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +29,9 @@ public interface VideogameRepository extends JpaRepository<Videogame, Integer>
     //This will return a list of videogames developed by a particular developer
     List<Videogame> getVideogameBydeveloper(String developer);
 
-    @Query(value = "SELECT v FROM Videogame v WHERE v.quantity != 0")
-    Page<Videogame> getAllGames(Pageable pageable);
-
     @Query("SELECT v FROM Videogame v WHERE v.gameName LIKE %?1%")
     List<Videogame> videogamesSearch(String keyword);
+
+    @Query("SELECT v FROM Videogame v where v.platform = ?1")
+    Page<Videogame>allGamesofAplatform(Platforms platform, Pageable pageable);
 }

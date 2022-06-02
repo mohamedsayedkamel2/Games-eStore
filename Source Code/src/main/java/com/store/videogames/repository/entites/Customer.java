@@ -2,8 +2,11 @@ package com.store.videogames.repository.entites;
 
 import com.store.videogames.repository.entites.enums.AuthenticationProvider;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.redis.core.RedisHash;
+import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,19 +19,23 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@NamedEntityGraph(name = "Customer.roles", attributeNodes = @NamedAttributeNode("roles"))
+@Getter
+@Setter
 public class Customer implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -105,218 +112,13 @@ public class Customer implements Serializable
     @Column(name = "auth_provider")
     private AuthenticationProvider authenticationProvider;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
-    private List<DigitalVideogameCode> digitalVideogameCode;
-
-    /*Setters and getters area*/
-    public List<Videogame> getVideogameList()
-    {
-        return videogameList;
-    }
-
-    public Integer getId()
-    {
-        return id;
-    }
-
     public void addVideogame(Videogame videogame)
     {
         this.videogameList.add(videogame);
     }
 
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public float getBalance()
-    {
-        return balance;
-    }
-
-    public void setBalance(float balance)
-    {
-        this.balance = balance;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Roles> getRoles()
-    {
-        return roles;
-    }
-
-    public void setRoles(List<Roles> roles)
-    {
-        this.roles = roles;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public int getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(int zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public LocalTime getRegistrationTime()
-    {
-        return registrationTime;
-    }
-
-    public void setRegistrationTime(LocalTime registrationTime)
-    {
-        this.registrationTime = registrationTime;
-    }
-
-    public boolean getEnabled()
-    {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled)
-    {
-        this.enabled = enabled;
-    }
-
-    public void setResetPasswordToken(String resetPasswordToken)
-    {
-        this.resetPasswordToken = resetPasswordToken;
-    }
-
-    public String getResetPasswordToken()
-    {
-        return resetPasswordToken;
-    }
-
-    public String getEmailVerificationCode()
-    {
-        return emailVerificationCode;
-    }
-
-    public void setEmailVerificationCode(String emailVerificationCode)
-    {
-        this.emailVerificationCode = emailVerificationCode;
-    }
-
-    public List<Order> getOrdersList()
-    {
-        return Collections.unmodifiableList(ordersList);
-    }
-
-    public AuthenticationProvider getAuthenticationProvider()
-    {
-        return authenticationProvider;
-    }
-
-    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider)
-    {
-        this.authenticationProvider = authenticationProvider;
-    }
-
     public void addRole(Roles role)
     {
         this.roles.add(role);
-    }
-
-    public List<DigitalVideogameCode> getDigitalVideogameCode() {
-        return digitalVideogameCode;
-    }
-
-    public void setDigitalVideogameCode(List<DigitalVideogameCode> digitalVideogameCode) {
-        this.digitalVideogameCode = digitalVideogameCode;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Customer{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role='"  + '\'' +
-                ", enabled=" + enabled +
-                ", countryName='" + countryName + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", userBalance=" + balance +
-                ", streetName='" + streetName + '\'' +
-                ", zipCode=" + zipCode +
-                ", registrationDate=" + registrationDate +
-                ", registrationTime=" + registrationTime +
-                ", videogameList=" + videogameList +
-                ", ordersList=" + getOrdersList() +
-                ", resetPasswordToken='" + resetPasswordToken + '\'' +
-                ", emailVerificationCode='" + emailVerificationCode + '\'' +
-                '}';
     }
 }

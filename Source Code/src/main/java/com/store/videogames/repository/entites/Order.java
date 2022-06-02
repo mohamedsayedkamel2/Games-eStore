@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,6 +23,8 @@ import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity(name = "customer_order")
 @Table(name = "customer_order")
 public class Order
@@ -38,9 +41,12 @@ public class Order
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "videogame_id")
     private Videogame videogame;
+
+    @JoinColumn(name = "digital_code", nullable = true, columnDefinition = "")
+    private String digitalVideogameCode;
 
     @Column(name = "quantity")
     private int quantity;
@@ -51,69 +57,13 @@ public class Order
     @Column(name = "order_time")
     private LocalTime purchaseTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getOrderTransaction() {
-        return orderTransaction;
-    }
-
-    public void setOrderTransaction(String orderTransaction) {
-        this.orderTransaction = orderTransaction;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Videogame getVideogame() {
-        return videogame;
-    }
-
-    public void setVideogame(Videogame videogame) {
-        this.videogame = videogame;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public LocalDate getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
-
-    public LocalTime getPurchaseTime() {
-        return purchaseTime;
-    }
-
-    public void setPurchaseTime(LocalTime purchaseTime) {
-        this.purchaseTime = purchaseTime;
-    }
-
     @Override
     public String toString()
     {
         return "Order{" +
                 "id=" + id +
                 ", customer=" + customer.getFirstName() +
-                ", videogame=" + videogame.getGameName() +
+                ", videogame=" +
                 ", quantity=" + quantity +
                 ", purchaseDate=" + purchaseDate +
                 ", purchaseTime=" + purchaseTime +

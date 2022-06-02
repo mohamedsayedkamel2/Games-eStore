@@ -63,7 +63,7 @@ public class CustomerEmailService
         Customer customer = customerRepository.getCustomerByEmailVerificationCode(verificationCode);
         System.out.println(customer);
         System.out.println(customer.getEmailVerificationCode());
-        if (customer == null || customer.getEnabled())
+        if (customer == null || customer.isEnabled())
         {
             return false;
         }

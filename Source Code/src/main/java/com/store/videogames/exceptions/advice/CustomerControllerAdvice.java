@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomerControllerAdvice
 {
-    @ExceptionHandler(value = CustomerNotFoundException.class)
-    public String CustomerNotFound(Model model)
-    {
-        model.addAttribute("error_message","Coulnd't find the username you are looking for");
-        return "/error/customer_notfound";
-    }
+//    @ExceptionHandler(value = CustomerNotFoundException.class)
+//    public String CustomerNotFound(Model model)
+//    {
+//        model.addAttribute("error_message","Coulnd't find the username you are looking for");
+//        return "/error/customer_notfound";
+//    }
 
     @ExceptionHandler(value = EmailNotVerifiedException.class)
     public String saym(Model model)

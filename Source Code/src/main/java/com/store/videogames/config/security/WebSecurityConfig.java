@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -63,25 +64,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Override
+    public void configure(WebSecurity webSecurity)
+    {
+        webSecurity.ignoring().
+                antMatchers("/customer/register").
+                antMatchers("/forgot_password").
+                antMatchers("/reset_password").
+                antMatchers("/verify").
+                antMatchers("/verify/*").
+                antMatchers("/oauth2/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        //I split the http requests handling into 2 parts this is the first part
-        //This first step will take care of user login/registration/verification
-        //This step was made to avoid Cookie theif problem
-        http.authorizeRequests().
-                antMatchers("/login").permitAll().
-                antMatchers("/customer/register").permitAll().
-                antMatchers("/forgot_password").permitAll().
-                antMatchers("/reset_password").permitAll().
-                antMatchers("/verify").permitAll().
-                antMatchers("/verify/*").permitAll().
-                antMatchers("/oauth2/**").permitAll();
-        //The second part of http security requests handling
+        http.authorizeRequests().antMatchers("/admin/customers/**").hasAuthority("ADMIN").
+                antMatchers("/logout", "/videogames/buy/**", "/customer/**").hasAuthority("USER").
+                and().exceptionHandling()
+                .accessDeniedPage("/404");
+
                 http.authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll().loginPage("/login").permitAll().
                 and().logout().permitAll().
-                and().rememberMe().tokenRepository(persistentTokenRepository()).
+                and().rememberMe().key("123456789abcdefghijklmnopqrdtuzwxyZ").
+                        tokenValiditySeconds(30 * 24 * 60 * 60).
         //This part is concerned about Google Login configuration
                 and().oauth2Login().loginPage("/login").userInfoEndpoint().userService(auth2UserService).
                 and().successHandler(oAuth2SuccessfultHandler);
