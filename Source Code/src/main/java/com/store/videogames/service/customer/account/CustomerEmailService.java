@@ -20,13 +20,13 @@ public class CustomerEmailService
 {
     //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerService
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    EmailUtil emailUtil;
+    private EmailUtil emailUtil;
 
     @Autowired
-    JavaMailSender javaMailSender;
+    private JavaMailSender javaMailSender;
 
     public void sendVerificationEmail(Customer customer, String siteURL) throws MessagingException, UnsupportedEncodingException
     {

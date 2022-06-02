@@ -10,14 +10,12 @@
     <th>Transaction ID</th>
     <th>Game name</th>
     <th>Price</th>
-    <th>Quantity</th>
     <th>Purchase Date</th>
   </tr>
   <tr th:each="order : ${ordersList}">
     <td>[[${order.orderTransaction}]]</td>
     <td>[[${order.videogame.gameName}]]</td>
     <td>[[${order.videogame.price}]]</td>
-    <td>[[${order.quantity}]]</td>
     <td>[[${order.purchaseDate}]]</td>
   </tr>
 </table>

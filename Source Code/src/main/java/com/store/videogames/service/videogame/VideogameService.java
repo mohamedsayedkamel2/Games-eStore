@@ -35,7 +35,7 @@ public class VideogameService implements Serializable
     @Cacheable("Videogame")
     public Page<Videogame> retriveAllVideogames(int currentPage)
     {
-        Pageable pageable = PageRequest.of(currentPage - 1, 25);
+        Pageable pageable = PageRequest.of(currentPage - 1, 1);
         return videogameRepository.findAll(pageable);
     }
 
@@ -67,12 +67,6 @@ public class VideogameService implements Serializable
     public List<Videogame> getVideogameBydeveloper(String developer)
     {
         return videogameRepository.getVideogameBydeveloper(developer);
-    }
-
-    @Cacheable("Videogame")
-    public List<Videogame> searchforVideogame(String keyword)
-    {
-        return videogameRepository.videogamesSearch(keyword);
     }
 
     @Cacheable("Videogame")

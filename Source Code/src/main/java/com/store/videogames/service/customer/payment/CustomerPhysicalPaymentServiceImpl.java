@@ -39,7 +39,7 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
     EmailUtil emailUtil;
 
     @Override
-    public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException
+    public boolean buyProduct(Customer customer, float overallPrice, Videogame videogame) throws MessagingException
     {
         //store old customer balance
         float oldCustomerBalance = customer.getBalance();
@@ -52,21 +52,20 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
         //update the videogame record in the database with the new data
         videogameService.storeNewVideogame(videogame);
         //create an order and a history record of the user balance before and after the payment
-        Order order = createOrder(customer,quantity,videogame, null);
+        Order order = createOrder(customer,videogame, null);
         moneyHistoryRecord(order, oldCustomerBalance,newUserBalance);
         sendOrderMail(order);
         return true;
     }
 
     @Override
-    public Order createOrder(Customer customer, int quantity, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
+    public Order createOrder(Customer customer, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
     {
         Order order = new Order();
         order.setOrderTransaction(RandomString.make(64));
         order.setCustomer(customer);
         order.setPurchaseDate(LocalDate.now());
         order.setPurchaseTime(LocalTime.now());
-        order.setQuantity(quantity);
         order.setVideogame(videogame);
         orderRepository.save(order);
         return order;
@@ -89,7 +88,6 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
         String body = "The game will arrive bettwen 5 - 7 days " +
                 "Transaction ID: " + order.getOrderTransaction()  +
                 " Game name: " + order.getVideogame().getGameName() +
-                " Quantity: " + order.getQuantity() +
                 " Price: " + order.getVideogame().getPrice() +
                 " Purchase Date: " + order.getPurchaseDate();
         emailUtil.sendEmail(order.getCustomer().getEmail(), subject,body);

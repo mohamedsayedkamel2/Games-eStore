@@ -46,7 +46,7 @@ public class VideogamesPaymentController
     }
 
     @PostMapping("/buy")
-    String buyVideogameProcess(@RequestParam("id") int id,@RequestParam("quantity") int quantity ,@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl, @RequestParam(value = "digital", required = false)boolean isDigtial, RedirectAttributes redirectAttributes, Model model) throws MessagingException
+    String buyVideogameProcess(@RequestParam("id") int id,@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl, @RequestParam(value = "digital", required = false)boolean isDigtial, RedirectAttributes redirectAttributes, Model model) throws MessagingException
     {
         String returnUrlFail = "redirect:/videogames/buy/" + id;
         Customer customer = customerDetailsImpl.getCustomer();
@@ -56,8 +56,8 @@ public class VideogamesPaymentController
             redirectAttributes.addFlashAttribute("message","The game isn't found");
             return returnUrlFail;
         }
-        float totalPrice = quantity * videogame.getPrice();
-        boolean isPaymentSuccessful = customerPaymentExecutionService.buyGame(customer, quantity, totalPrice, videogame, isDigtial);
+        float price = videogame.getPrice();
+        boolean isPaymentSuccessful = customerPaymentExecutionService.buyGame(customer, price, videogame, isDigtial);
         if (isPaymentSuccessful == false)
         {
             redirectAttributes.addFlashAttribute("message","Unsufficent balance");

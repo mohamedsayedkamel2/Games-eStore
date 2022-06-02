@@ -121,4 +121,11 @@ public class Customer implements Serializable
     {
         this.roles.add(role);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Customer{" +
+                "id=" + id;
+    }
 }

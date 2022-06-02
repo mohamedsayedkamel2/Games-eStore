@@ -29,9 +29,6 @@ public interface VideogameRepository extends JpaRepository<Videogame, Integer>
     //This will return a list of videogames developed by a particular developer
     List<Videogame> getVideogameBydeveloper(String developer);
 
-    @Query("SELECT v FROM Videogame v WHERE v.gameName LIKE %?1%")
-    List<Videogame> videogamesSearch(String keyword);
-
     @Query("SELECT v FROM Videogame v where v.platform = ?1")
     Page<Videogame>allGamesofAplatform(Platforms platform, Pageable pageable);
 }

@@ -28,6 +28,11 @@ public class VideogameController
     }
 
     @GetMapping("/{pageNumber}")
+    public String displayAll(Model model, @PathVariable int pageNumber)
+    {
+        return displayByPageNumber(null,pageNumber,model) + "/allVideogames";
+    }
+
     String displayByPageNumber(Platforms platform, int currentPage, Model model)
     {
         Page<Videogame> page;

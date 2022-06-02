@@ -11,8 +11,8 @@ import javax.mail.MessagingException;
 public interface ICustomerPaymentSerivce
 {
     //putting @Transactional here is a bad practice, it's advised to put in on the concrete class
- boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException;
- Order createOrder(Customer customer, int quantity, Videogame videogame, DigitalVideogameCode digitalVideogameCode);
+ boolean buyProduct(Customer customer, float overallPrice, Videogame videogame) throws MessagingException;
+ Order createOrder(Customer customer, Videogame videogame, DigitalVideogameCode digitalVideogameCode);
  void moneyHistoryRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder);
  void sendOrderMail(Order order) throws MessagingException;
 

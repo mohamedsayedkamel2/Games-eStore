@@ -40,7 +40,7 @@ public class CustomerDigitalPaymentServiceImpl implements ICustomerPaymentSerivc
     private EmailUtil emailUtil;
 
     @Override
-    public boolean buyProduct(Customer customer, int quantity, float overallPrice, Videogame videogame) throws MessagingException
+    public boolean buyProduct(Customer customer, float overallPrice, Videogame videogame) throws MessagingException
     {
         //store old customer balance
         float oldCustomerBalance = customer.getBalance();
@@ -64,7 +64,7 @@ public class CustomerDigitalPaymentServiceImpl implements ICustomerPaymentSerivc
             return false;
         }
         //create an order and a history record of the user balance before and after the payment
-        Order order = createOrder(customer,quantity,videogame, code);
+        Order order = createOrder(customer,videogame, code);
         digitalVideogameCodeRepository.delete(code);
         moneyHistoryRecord(order, oldCustomerBalance,newUserBalance);
         sendOrderMail(order);
@@ -72,14 +72,13 @@ public class CustomerDigitalPaymentServiceImpl implements ICustomerPaymentSerivc
     }
 
     @Override
-    public Order createOrder(Customer customer, int quantity, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
+    public Order createOrder(Customer customer, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
     {
         Order order = new Order();
         order.setOrderTransaction(RandomString.make(64));
         order.setCustomer(customer);
         order.setPurchaseDate(LocalDate.now());
         order.setPurchaseTime(LocalTime.now());
-        order.setQuantity(quantity);
         order.setVideogame(videogame);
         order.setDigitalVideogameCode(digitalVideogameCode.getGameCode());
         orderRepository.save(order);

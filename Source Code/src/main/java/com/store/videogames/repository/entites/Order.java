@@ -41,15 +41,12 @@ public class Order
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "videogame_id")
     private Videogame videogame;
 
     @JoinColumn(name = "digital_code", nullable = true, columnDefinition = "")
     private String digitalVideogameCode;
-
-    @Column(name = "quantity")
-    private int quantity;
 
     @Column(name = "order_date")
     private LocalDate purchaseDate;
@@ -62,9 +59,10 @@ public class Order
     {
         return "Order{" +
                 "id=" + id +
-                ", customer=" + customer.getFirstName() +
-                ", videogame=" +
-                ", quantity=" + quantity +
+                ", orderTransaction='" + orderTransaction + '\'' +
+                ", customer=" + customer +
+                ", videogame=" + videogame +
+                ", digitalVideogameCode='" + digitalVideogameCode + '\'' +
                 ", purchaseDate=" + purchaseDate +
                 ", purchaseTime=" + purchaseTime +
                 '}';

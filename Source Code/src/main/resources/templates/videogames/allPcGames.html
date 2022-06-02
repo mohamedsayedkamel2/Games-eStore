@@ -24,10 +24,7 @@
         </block>
     </tr>
 </table>
-Total items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]<br>
-<span th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{'/' + ${i}}">[[${i}]]</a>
-    </span>
+<div th:replace="fragments :: game-page" />
 </form>
 <script type="text/javascript">
     $(document).ready(function(){

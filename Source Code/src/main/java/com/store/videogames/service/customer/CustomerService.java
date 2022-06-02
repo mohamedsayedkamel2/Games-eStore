@@ -8,6 +8,8 @@ import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository
 import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.interfaces.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -24,6 +26,8 @@ public class CustomerService
     @Autowired
     private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
 
+    @CachePut("Customer")
+    @Transactional
     public void saveCustomerIntoDB(Customer customer)
     {
         customerRepository.save(customer);
@@ -35,65 +39,79 @@ public class CustomerService
         customerRepository.save(customer);
     }
 
+    @Cacheable("Customer")
     public Customer getCustomerbyEmail(String email)
     {
         return customerRepository.getCustomerByEmail(email);
     }
 
+    @Cacheable("Customer")
     public Customer getCustomerByUsername(String username)
     {
         return customerRepository.getCustomerByUsername(username);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByCountryName(String countryName)
     {
         return customerRepository.getCustomerByCountryName(countryName);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByCityName(String cityName)
     {
         return customerRepository.getCustomerByCityName(cityName);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByStreetName(String streetName)
     {
         return customerRepository.getCustomerByStreetName(streetName);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByZipCode(int zipCode)
     {
         return customerRepository.getCustomerByZipCode(zipCode);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByRegistrationDate(LocalDate registrationDate)
     {
         return customerRepository.getCustomerByRegistrationDate(registrationDate);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByRegistrationTime(LocalTime registrationTime)
     {
         return customerRepository.getCustomerByRegistrationTime(registrationTime);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getCustomersByEnabled(Boolean isEnabled)
     {
         return customerRepository.getCustomerByEnabled(isEnabled);
     }
 
+    @Cacheable("Customer")
     public Customer getByEmailVerificationCode(String EmailVerificationCode)
     {
         return customerRepository.getCustomerByEmailVerificationCode(EmailVerificationCode);
     }
+
+    @Cacheable("Customer")
     public Customer getCustomerByResetPasswordToken(String token)
     {
         return customerRepository.getCustomerByResetPasswordToken(token);
     }
 
+    @Cacheable("Customer")
     public CustomerMoneyHistory getMoneyHistoryByOrder(Order order)
     {
         return customerMoneyHistoryRepository.getCustomerMoneyHistoryByOrder(order);
     }
 
+    @Cacheable("Customer")
     public List<Customer> getAll()
     {
         return customerRepository.findAll();
@@ -126,6 +144,7 @@ public class CustomerService
         return false;
     }
 
+    @Cacheable("Customer")
     public Customer getCustomerById(int id) throws CustomerNotFoundException
     {
         try
@@ -138,6 +157,8 @@ public class CustomerService
         }
     }
 
+    @CachePut("Customer")
+    @Transactional
     public void updateCustomerEnabled(int id, boolean newEnableStatus)
     {
         customerRepository.updateEnabledStatus(id,newEnableStatus);

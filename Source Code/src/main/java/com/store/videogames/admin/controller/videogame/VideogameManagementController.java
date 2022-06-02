@@ -1,9 +1,7 @@
 package com.store.videogames.admin.controller.videogame;
 
-import com.store.videogames.repository.entites.Roles;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
-import com.store.videogames.repository.interfaces.RolesRepository;
 import com.store.videogames.repository.interfaces.VideogameRepository;
 import com.store.videogames.service.videogame.VideogameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller

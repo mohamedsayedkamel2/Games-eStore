@@ -44,6 +44,18 @@ a:link {
       </tbody>
     </table>
   </div>
+<div class="text-center m-1" th:if="${totalItems > 0}">
+  <nav>
+    <ul class="pagination justify-content-center">
+      <li class="page-item"><a class="page-link" th:href="@{/admin/games/1}">First</a></li>
+      <li class="page-item"><a class="page-link" th:href="@{'/admin/games/' + ${currentPage - 1}}" th:if="${currentPage != 1}">Previous</a></li>
+      <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"><a class="page-link" th:href="@{'/admin/games/' + ${i}}">[[${i}]]</a></li>
+      <li class="page-item"><a class="page-link" th:href="@{'/admin/games/' + ${currentPage + 1}}" th:if="${currentPage != totalPages}">Next</a></li>
+      <li class="page-item"><a class="page-link" th:href="@{'/admin/games/' + ${totalPages}}">Last</a></li>
+    </ul>
+  </nav>
+  Page [[${currentPage}]] of [[${totalPages}]]<br>
+</div>
   <div class="text-center">
     <p>Gaming4all - Copyright &copy;</p>
   </div>

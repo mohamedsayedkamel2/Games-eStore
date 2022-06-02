@@ -29,11 +29,18 @@ a:link {
         </block>
     </tr>
 </table>
-Total items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]<br>
-<span th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{'/admin/games/' + ${i}}">[[${i}]]</a>
-    </span>
-</form>
+<div class="text-center m-1" th:if="${totalItems > 0}">
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link" th:href="@{/admin/games/1}">First</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{'/admin/games/' + ${currentPage - 1}}" th:if="${currentPage != 1}">Previous</a></li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"><a class="page-link" th:href="@{'/admin/games/' + ${i}}">[[${i}]]</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{'/admin/games/' + ${currentPage + 1}}" th:if="${currentPage != totalPages}">Next</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{'/admin/games/' + ${totalPages}}">Last</a></li>
+        </ul>
+    </nav>
+Page [[${currentPage}]] of [[${totalPages}]]<br>
+</div>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#logoutLink").on("click", function(e){

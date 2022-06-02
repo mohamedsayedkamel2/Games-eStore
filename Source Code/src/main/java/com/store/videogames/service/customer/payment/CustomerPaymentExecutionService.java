@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 @Service
+@Transactional
 public class CustomerPaymentExecutionService
 {
     @Autowired
@@ -20,7 +21,7 @@ public class CustomerPaymentExecutionService
     ICustomerPaymentSerivce customerPaymentSerivce;
 
     @Transactional(rollbackOn = Exception.class)
-    public boolean buyGame(Customer customer, int quantity, float overallPrice, Videogame videogame, boolean isDigitalOrder) throws MessagingException
+    public boolean buyGame(Customer customer, float overallPrice, Videogame videogame, boolean isDigitalOrder) throws MessagingException
     {
         checkIfDigital(isDigitalOrder);
         if (customerPaymentSerivce.isBalanceSufficent(videogame.getPrice(), customer.getBalance()) == false)
@@ -29,7 +30,7 @@ public class CustomerPaymentExecutionService
             return false;
         }
 
-        if (customerPaymentSerivce.buyProduct(customer,quantity,overallPrice,videogame) == false)
+        if (customerPaymentSerivce.buyProduct(customer,overallPrice,videogame) == false)
         {
             System.out.println("Error happened while payment process");
             return false;

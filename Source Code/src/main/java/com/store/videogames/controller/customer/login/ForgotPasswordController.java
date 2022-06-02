@@ -21,7 +21,7 @@ import java.io.UnsupportedEncodingException;
 public class ForgotPasswordController
 {
     @Autowired
-    EmailUtil emailUtil;
+    private EmailUtil emailUtil;
     @Autowired
     private CustomerService customerService;
     @Autowired

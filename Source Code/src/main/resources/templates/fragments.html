@@ -52,5 +52,18 @@
         </nav>
     </div>
 </div>
+
+<div class="text-center m-1" th:if="${totalItems > 0}" th:fragment="game-page">
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link" th:href="@{/videogames/1}">First</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{'/videogames/' + ${currentPage - 1}}" th:if="${currentPage != 1}">Previous</a></li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"><a class="page-link" th:href="@{'/videogames/' + ${i}}">[[${i}]]</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{'/videogames/' + ${currentPage + 1}}" th:if="${currentPage != totalPages}">Next</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{'/videogames/' + ${totalPages}}">Last</a></li>
+        </ul>
+    </nav>
+    Page [[${currentPage}]] of [[${totalPages}]]<br>
+</div>
 </body>
 </html>
