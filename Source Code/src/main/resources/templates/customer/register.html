@@ -1,21 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Registration Page</title>
-</head>
+<head th:replace="fragments :: html_head" />
 <body>
-<form th:action="@{/customer/register}" th:object="${customer}" method="post">
-    Your First name: <input th:field="*{firstName}"><br>
+<div class="container-fluid text-center">
+<div class="text-center">
+    <h1>Registration form</h1>
+</div>
+<form th:action="@{/customer/register}" th:object="${customer}" method="post" style="max-width: 350px; margin: 0 auto">
+    <div class="border border-secondary rounded p-3">
+        <p>Registration Page</p>
+    Your First name: <input th:field="*{firstName}" required><br>
     Your Last name: <input th:field="*{LastName}"><br>
     Your username: <input th:field="*{username}"><br>
-    Your email: <input th:field="*{email}" type="email"><br>
-    Your password: <input th:field="*{password}" type="password"><br>
+    Your email: <input th:field="*{email}" type="email" required><br>
+    Your password: <input th:field="*{password}" type="password" required><br>
     Your country: <input th:field="*{countryName}"><br>
     Your City: <input th:field="*{cityName}"><br>
     Your Street: <input th:field="*{streetName}"><br>
     Your zipCode: <input th:field="*{zipCode}"><br>
-    <button type="submit">Sumbit</button>
+    <input type="submit" class="btn btn-primary" value="Submit">
+    <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+    </div>
 </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $("#buttonCancel").on("click", function()
+        {
+            window.location = "[[@{/login}]]";
+        });
+    });
+</script>
 </body>
 </html>

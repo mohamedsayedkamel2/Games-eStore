@@ -1,7 +1,5 @@
 package com.store.videogames.config.security;
 
-import com.store.videogames.config.security.oAuth2.CustomAuth2UserService;
-import com.store.videogames.config.security.oAuth2.OAuth2SuccessfultHandler;
 import com.store.videogames.util.common.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +22,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired
     DataSource dataSource;
-    @Autowired
-    CustomAuth2UserService auth2UserService;
-    @Autowired
-    OAuth2SuccessfultHandler oAuth2SuccessfultHandler;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -71,8 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 antMatchers("/forgot_password").
                 antMatchers("/reset_password").
                 antMatchers("/verify").
-                antMatchers("/verify/*").
-                antMatchers("/oauth2/**");
+                antMatchers("/verify/*");
     }
 
     @Override
@@ -88,9 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .formLogin().permitAll().loginPage("/login").permitAll().
                 and().logout().permitAll().
                 and().rememberMe().key("123456789abcdefghijklmnopqrdtuzwxyZ").
-                        tokenValiditySeconds(30 * 24 * 60 * 60).
+                        tokenValiditySeconds(30 * 24 * 60 * 60);
         //This part is concerned about Google Login configuration
-                and().oauth2Login().loginPage("/login").userInfoEndpoint().userService(auth2UserService).
-                and().successHandler(oAuth2SuccessfultHandler);
     }
 }
