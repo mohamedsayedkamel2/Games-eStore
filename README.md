@@ -29,9 +29,15 @@ It's a Spring boot web application, Used for selling video games to the customer
 6. if the user isn't verified then the user won't be able to login into the website
 7. in case the user forgot the password, the user will have the ability to change the password using a sent email which contains change password url
 8. the application caches the data to prevent unnecessary calls to the DB and to improve the performance and this functionality is done using Redis
-9. the admin can do full CRUD operations on the application entites
+9. the user will be able to view the games page by page, each page will have a certain amount of games. This is done for better readability.
+10. the admin can do full CRUD operations on the application entites
 
 ### Project Demo photos
+https://msayedkamel2003.github.io/portfolio/images/spring_1.png
+https://msayedkamel2003.github.io/portfolio/images/spring_2.png
+https://msayedkamel2003.github.io/portfolio/images/spring_3.png
+https://msayedkamel2003.github.io/portfolio/images/spring_4.png
+https://msayedkamel2003.github.io/portfolio/images/spring_5.png
 
 ### Project Demo Video url (SOON)
 
