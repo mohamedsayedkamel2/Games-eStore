@@ -33,11 +33,11 @@ It's a Spring boot web application, Used for selling video games to the customer
 10. the admin can do full CRUD operations on the application entites
 
 ### Project Demo photos
-![Image]([https://myoctocat.com/assets/images/base-octocat.svg](https://msayedkamel2003.github.io/portfolio/images/spring_1.png))
-![Image]([https://myoctocat.com/assets/images/base-octocat.svg](https://msayedkamel2003.github.io/portfolio/images/spring_2.png))
-![Image]([https://myoctocat.com/assets/images/base-octocat.svg](https://msayedkamel2003.github.io/portfolio/images/spring_3.png))
-![Image]([https://myoctocat.com/assets/images/base-octocat.svg](https://msayedkamel2003.github.io/portfolio/images/spring_4.png))
-![Image]([https://myoctocat.com/assets/images/base-octocat.svg](https://msayedkamel2003.github.io/portfolio/images/spring_5.png))
+![Image](https://msayedkamel2003.github.io/portfolio/images/spring_1.png)
+![Image](https://msayedkamel2003.github.io/portfolio/images/spring_2.png)
+![Image](https://msayedkamel2003.github.io/portfolio/images/spring_3.png)
+![Image](https://msayedkamel2003.github.io/portfolio/images/spring_4.png)
+![Image](https://msayedkamel2003.github.io/portfolio/images/spring_5.png)
 
 ### Project Demo Video url (SOON)
 
