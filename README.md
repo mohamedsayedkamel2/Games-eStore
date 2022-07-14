@@ -13,7 +13,6 @@ It's a Spring boot web application, Used for selling video games to the customer
 7. Thymeleaf
 8. AJAX
 9. Redis
-10. Design Patterns
 11. UML
 12. JUnit
 13. Maven
@@ -31,14 +30,3 @@ It's a Spring boot web application, Used for selling video games to the customer
 8. the application caches the data to prevent unnecessary calls to the DB and to improve the performance and this functionality is done using Redis
 9. the user will be able to view the games page by page, each page will have a certain amount of games. This is done for better readability.
 10. the admin can do full CRUD operations on the application entites
-
-### Project Demo photos
-![Image](https://msayedkamel2003.github.io/portfolio/images/spring_1.png)
-![Image](https://msayedkamel2003.github.io/portfolio/images/spring_2.png)
-![Image](https://msayedkamel2003.github.io/portfolio/images/spring_3.png)
-![Image](https://msayedkamel2003.github.io/portfolio/images/spring_4.png)
-![Image](https://msayedkamel2003.github.io/portfolio/images/spring_5.png)
-
-### Project Demo Video url (SOON)
-
-### Project live link (SOON)
