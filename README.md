@@ -1,4 +1,4 @@
-# EpicGamerStore
+# Games eStore
 
 ### Description
 It's a Spring boot web application, Used for selling video games to the customers.
