@@ -42,6 +42,14 @@ public class CustomerRegistrationService
     @CachePut("Customer")
     public boolean registerCustomer(Customer customer, HttpServletRequest httpServletRequest) throws MessagingException, UnsupportedEncodingException
     {
+        setCustomerData(customer);
+        customerService.saveCustomerIntoDB(customer);
+        sendVerificationEmail(httpServletRequest,customer);
+        return true;
+    }
+
+    void setCustomerData(Customer customer)
+    {
         //First we will set the user registration date and time
         customer.setRegistrationDate(LocalDate.now());
         customer.setRegistrationTime(LocalTime.now());
@@ -58,12 +66,13 @@ public class CustomerRegistrationService
         roles.add(role);
         customer.setRoles(roles);
         customer.setBalance(10000);
-        //We will store the user into  DB then we will send the user an email which contains the verification link
-        customerService.saveCustomerIntoDB(customer);
+    }
+
+    void sendVerificationEmail(HttpServletRequest request, Customer customer) throws MessagingException, UnsupportedEncodingException
+    {
         //This variable will store the website url and send it to send Verification Email function
-        String websiteUrl = WebsiteUrlGetter.getSiteURL(httpServletRequest);
+        String websiteUrl = WebsiteUrlGetter.getSiteURL(request);
         customerEmailService.sendVerificationEmail(customer, websiteUrl);
-        return true;
     }
 
     public void updatePassword(Customer customer, String newPassword)

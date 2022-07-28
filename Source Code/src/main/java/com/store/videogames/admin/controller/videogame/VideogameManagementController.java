@@ -3,7 +3,8 @@ package com.store.videogames.admin.controller.videogame;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
 import com.store.videogames.repository.interfaces.VideogameRepository;
-import com.store.videogames.service.videogame.VideogameService;
+import com.store.videogames.service.videogame.VideogameRetrivingService;
+import com.store.videogames.service.videogame.VideogameUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +24,11 @@ import java.util.List;
 public class VideogameManagementController
 {
     @Autowired
-    private VideogameService videogameService;
+    private VideogameRetrivingService videogameRetrivingService;
     @Autowired
     private VideogameRepository videogameRepository;
+    @Autowired
+    private VideogameUpdateService videogameUpdateService;
 
     //The create section
 
@@ -43,7 +46,7 @@ public class VideogameManagementController
     public String createNewGame(Videogame videogame, RedirectAttributes redirectAttributes)
     {
         videogame.setDigitallyAvaliable(true);
-        videogameService.storeNewVideogame(videogame);
+        videogameUpdateService.storeNewVideogame(videogame);
         redirectAttributes.addFlashAttribute("videogame", "New game had been created successfuly!");
         return "redirect:/admin/games";
     }

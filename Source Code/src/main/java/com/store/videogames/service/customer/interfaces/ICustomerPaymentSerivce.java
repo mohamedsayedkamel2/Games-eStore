@@ -12,18 +12,14 @@ public interface ICustomerPaymentSerivce
 {
     //putting @Transactional here is a bad practice, it's advised to put in on the concrete class
  boolean buyProduct(Customer customer, float overallPrice, Videogame videogame) throws MessagingException;
- Order createOrder(Customer customer, Videogame videogame, DigitalVideogameCode digitalVideogameCode);
- void moneyHistoryRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder);
- void sendOrderMail(Order order) throws MessagingException;
 
  default boolean isBalanceSufficent(float videogamePrice, float customerBalance)
  {
-  if (customerBalance < videogamePrice)
-  {
-   System.out.println("Balance not enough");
-   return false;
-  }
-  return true;
+    if (customerBalance < videogamePrice)
+    {
+       System.out.println("Balance not enough");
+       return false;
+    }
+    return true;
  }
-
 }

@@ -14,8 +14,7 @@ import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 
 @Service
-//If any exception happens just rollback
-@Transactional(rollbackOn = Exception.class)
+@Transactional
 public class CustomerEmailService
 {
     //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerService
@@ -74,6 +73,5 @@ public class CustomerEmailService
             customerRepository.save(customer);
             return true;
         }
-
     }
 }

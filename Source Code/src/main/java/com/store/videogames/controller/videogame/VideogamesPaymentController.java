@@ -5,7 +5,7 @@ import com.store.videogames.repository.entites.Customer;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.VideogameRepository;
 import com.store.videogames.service.customer.payment.CustomerPaymentExecutionService;
-import com.store.videogames.service.videogame.VideogameService;
+import com.store.videogames.service.videogame.VideogameRetrivingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
@@ -26,7 +25,7 @@ import javax.mail.MessagingException;
 public class VideogamesPaymentController
 {
     @Autowired
-    private VideogameService videogameService;
+    private VideogameRetrivingService videogameRetrivingService;
     @Autowired
     private VideogameRepository videogameRepository;
     @Autowired

@@ -82,6 +82,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 and().logout().permitAll().
                 and().rememberMe().key("123456789abcdefghijklmnopqrdtuzwxyZ").
                         tokenValiditySeconds(30 * 24 * 60 * 60);
-        //This part is concerned about Google Login configuration
     }
 }

@@ -2,7 +2,7 @@ package com.store.videogames.controller.videogame;
 
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
-import com.store.videogames.service.videogame.VideogameService;
+import com.store.videogames.service.videogame.VideogameRetrivingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import java.util.List;
 public class VideogameController
 {
     @Autowired
-    private VideogameService videogameService;
+    private VideogameRetrivingService videogameRetrivingService;
 
     @GetMapping
     public String getAllVidoegames(Model model)
@@ -39,12 +39,12 @@ public class VideogameController
         //If platform is null then this means the function requests all the videogames
         if (platform == null)
         {
-            page = videogameService.retriveAllVideogames(currentPage);
+            page = videogameRetrivingService.retriveAllVideogames(currentPage);
         }
         //If the platform is not null then this means the function requests a list of videogames of particular platform
         else
         {
-            page = videogameService.getVideogamesByPlatform(platform, currentPage);
+            page = videogameRetrivingService.getVideogamesByPlatform(platform, currentPage);
         }
         long totalItems = page.getTotalElements();
         long totalPages = page.getTotalPages();

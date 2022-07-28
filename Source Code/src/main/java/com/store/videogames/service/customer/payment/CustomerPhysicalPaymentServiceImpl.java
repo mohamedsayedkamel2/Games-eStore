@@ -6,13 +6,17 @@ import com.store.videogames.repository.entites.DigitalVideogameCode;
 import com.store.videogames.repository.entites.Order;
 import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
+import com.store.videogames.repository.interfaces.DigitalVideogameCodeRepository;
 import com.store.videogames.repository.interfaces.OrderRepository;
+import com.store.videogames.service.customer.CustomerMoneyHistoryService;
 import com.store.videogames.service.customer.CustomerService;
 import com.store.videogames.service.customer.interfaces.ICustomerPaymentSerivce;
-import com.store.videogames.service.videogame.VideogameService;
+import com.store.videogames.service.videogame.VideogameRetrivingService;
+import com.store.videogames.service.videogame.VideogameUpdateService;
 import com.store.videogames.util.interfaces.EmailUtil;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +24,6 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @Primary
@@ -28,15 +31,17 @@ import java.time.format.DateTimeFormatter;
 public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSerivce
 {
     @Autowired
-    private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
+    private DigitalVideogameCodeRepository digitalVideogameCodeRepository;
     @Autowired
-    CustomerService customerService;
+    private CustomerMoneyHistoryService customerMoneyHistoryService;
     @Autowired
-    VideogameService videogameService;
+    private CustomerService customerService;
     @Autowired
-    OrderRepository orderRepository;
+    private VideogameRetrivingService videogameRetrivingService;
     @Autowired
-    EmailUtil emailUtil;
+    private VideogameUpdateService videogameUpdateService;
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public boolean buyProduct(Customer customer, float overallPrice, Videogame videogame) throws MessagingException
@@ -47,49 +52,39 @@ public class CustomerPhysicalPaymentServiceImpl implements ICustomerPaymentSeriv
         float newUserBalance = customer.getBalance() - overallPrice;
         customer.setBalance(newUserBalance);
         customer.addVideogame(videogame);
-        //update the customer record in the databse with the new data
-        customerService.saveCustomerIntoDB(customer);
-        //update the videogame record in the database with the new data
-        videogameService.storeNewVideogame(videogame);
+        try
+        {
+            //update the customer record in the databse with the new data
+            customerService.saveCustomerIntoDB(customer);
+        }
+        catch (Exception exception)
+        {
+            System.out.println("Error happened while updating the new customer data");
+            return false;
+        }
+
+        try
+        {
+            //update the videogame record in the database with the new data
+            videogameUpdateService.storeNewVideogame(videogame);
+        }
+        catch (Exception exception)
+        {
+            System.out.println("Error happened whle updating the new video game data");
+            return false;
+        }
         //create an order and a history record of the user balance before and after the payment
-        Order order = createOrder(customer,videogame, null);
-        moneyHistoryRecord(order, oldCustomerBalance,newUserBalance);
-        sendOrderMail(order);
+        Order order = orderService.createOrder(customer,videogame);
+        try
+        {
+            customerMoneyHistoryService.createRecord(order, oldCustomerBalance,newUserBalance);
+        }
+        catch (Exception exception)
+        {
+            System.out.println("Error happened while creating a record");
+            return false;
+        }
+        orderService.sendPhysicalOrderMail(order);
         return true;
-    }
-
-    @Override
-    public Order createOrder(Customer customer, Videogame videogame, DigitalVideogameCode digitalVideogameCode)
-    {
-        Order order = new Order();
-        order.setOrderTransaction(RandomString.make(64));
-        order.setCustomer(customer);
-        order.setPurchaseDate(LocalDate.now());
-        order.setPurchaseTime(LocalTime.now());
-        order.setVideogame(videogame);
-        orderRepository.save(order);
-        return order;
-    }
-
-    @Override
-    public void moneyHistoryRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder)
-    {
-        CustomerMoneyHistory customerMoneyHistory = new CustomerMoneyHistory();
-        customerMoneyHistory.setOrder(order);
-        customerMoneyHistory.setMoneyBeforeOrder(moneyAmountBeforeOrder);
-        customerMoneyHistory.setMoneyAfterOrder(moneyAmountAfterOrder);
-        customerMoneyHistoryRepository.save(customerMoneyHistory);
-    }
-
-    @Override
-    public void sendOrderMail(Order order) throws MessagingException
-    {
-        String subject = "Thanks for buying " + order.getVideogame().getGameName();
-        String body = "The game will arrive bettwen 5 - 7 days " +
-                "Transaction ID: " + order.getOrderTransaction()  +
-                " Game name: " + order.getVideogame().getGameName() +
-                " Price: " + order.getVideogame().getPrice() +
-                " Purchase Date: " + order.getPurchaseDate();
-        emailUtil.sendEmail(order.getCustomer().getEmail(), subject,body);
     }
 }

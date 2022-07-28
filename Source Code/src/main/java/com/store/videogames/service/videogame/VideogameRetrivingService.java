@@ -4,7 +4,6 @@ import com.store.videogames.repository.entites.Videogame;
 import com.store.videogames.repository.entites.enums.Platforms;
 import com.store.videogames.repository.interfaces.VideogameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,25 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @Transactional
-public class VideogameService implements Serializable
+public class VideogameRetrivingService
 {
-    private static final long serialVersionUID = 1L;
-
     @Autowired
-    VideogameRepository videogameRepository;
-
-    @CachePut("Videogame")
-    public void storeNewVideogame(Videogame videogame)
-    {
-        videogameRepository.save(videogame);
-    }
-
+    private VideogameRepository videogameRepository;
 
     @Cacheable("Videogame")
     public Page<Videogame> retriveAllVideogames(int currentPage)
