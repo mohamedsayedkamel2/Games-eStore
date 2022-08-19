@@ -1,11 +1,12 @@
 package com.store.videogames.service.customer.account;
 
-import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.entites.Roles;
-import com.store.videogames.repository.entites.enums.AuthenticationProvider;
-import com.store.videogames.repository.interfaces.CustomerRepository;
-import com.store.videogames.repository.interfaces.RolesRepository;
-import com.store.videogames.service.customer.CustomerService;
+import com.store.videogames.entites.Customer;
+import com.store.videogames.entites.Roles;
+import com.store.videogames.exceptions.exception.MessageEncodingErrorException;
+import com.store.videogames.exceptions.exception.EmailUnknownErrorException;
+import com.store.videogames.repository.CustomerRepository;
+import com.store.videogames.repository.RolesRepository;
+import com.store.videogames.service.customer.CustomerInformationRetriverService;
 import com.store.videogames.util.common.PasswordEncoder;
 import com.store.videogames.util.common.WebsiteUrlGetter;
 import net.bytebuddy.utility.RandomString;
@@ -28,24 +29,21 @@ import java.util.List;
 public class CustomerRegistrationService
 {
     @Autowired
-    private CustomerService customerService;
+    private CustomerInformationRetriverService customerInformationRetriverService;
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
     private RolesRepository rolesRepository;
     @Autowired
     private CustomerEmailService customerEmailService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     //Customer registration process function
     @CachePut("Customer")
-    public boolean registerCustomer(Customer customer, HttpServletRequest httpServletRequest) throws MessagingException, UnsupportedEncodingException
+    public void registerCustomer(Customer customer, HttpServletRequest httpServletRequest)
     {
         setCustomerData(customer);
-        customerService.saveCustomerIntoDB(customer);
+        customerInformationRetriverService.saveCustomerIntoDB(customer);
         sendVerificationEmail(httpServletRequest,customer);
-        return true;
     }
 
     void setCustomerData(Customer customer)
@@ -54,7 +52,7 @@ public class CustomerRegistrationService
         customer.setRegistrationDate(LocalDate.now());
         customer.setRegistrationTime(LocalTime.now());
         //Second the user password will be encrypted
-        customer.setPassword(passwordEncoder.getBcryptPasswordEncoder().encode(customer.getPassword()));
+        customer.setPassword(PasswordEncoder.getBcryptPasswordEncoder().encode(customer.getPassword()));
         //Third step make a randomToken for the email verification and inject it in the customer object
         String randomCode = RandomString.make(64);
         customer.setEmailVerificationCode(randomCode);
@@ -65,32 +63,26 @@ public class CustomerRegistrationService
         List<Roles> roles = new ArrayList<>();
         roles.add(role);
         customer.setRoles(roles);
-        customer.setBalance(10000);
+        customer.setBalance(100);
     }
 
-    void sendVerificationEmail(HttpServletRequest request, Customer customer) throws MessagingException, UnsupportedEncodingException
+    void sendVerificationEmail(HttpServletRequest request, Customer customer)
     {
         //This variable will store the website url and send it to send Verification Email function
         String websiteUrl = WebsiteUrlGetter.getSiteURL(request);
-        customerEmailService.sendVerificationEmail(customer, websiteUrl);
-    }
-
-    public void updatePassword(Customer customer, String newPassword)
-    {
-        String encodedPassword = passwordEncoder.getBcryptPasswordEncoder().encode(newPassword);
-        customer.setPassword(encodedPassword);
-        customer.setResetPasswordToken(null);
-        customerRepository.save(customer);
-    }
-
-    /*Start of forgot-password feature code*/
-    public void updateResetPasswordToken(String token, String email)
-    {
-        Customer customer = customerRepository.getCustomerByEmail(email);
-        if (customer != null)
+        try
         {
-            customer.setResetPasswordToken(token);
-            customerRepository.save(customer);
+            customerEmailService.sendVerificationEmail(customer, websiteUrl);
+        }
+        catch (MessagingException e)
+        {
+            throw new EmailUnknownErrorException("Error occured while sending an email to the customer");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new MessageEncodingErrorException("Error occured while sending an email to the customer");
         }
     }
+
+
 }

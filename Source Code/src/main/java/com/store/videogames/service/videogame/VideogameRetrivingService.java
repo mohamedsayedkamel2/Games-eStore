@@ -1,8 +1,8 @@
 package com.store.videogames.service.videogame;
 
-import com.store.videogames.repository.entites.Videogame;
-import com.store.videogames.repository.entites.enums.Platforms;
-import com.store.videogames.repository.interfaces.VideogameRepository;
+import com.store.videogames.entites.Videogame;
+import com.store.videogames.entites.enums.Platforms;
+import com.store.videogames.repository.VideogameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -62,6 +62,6 @@ public class VideogameRetrivingService
     public Page<Videogame> getVideogamesByPlatform(Platforms platform, int currentPage)
     {
         Pageable pageable = PageRequest.of(currentPage - 1, 5);
-        return videogameRepository.allGamesofAplatform(platform, pageable);
+        return videogameRepository.getAllGamesByPlatform(platform, pageable);
     }
 }

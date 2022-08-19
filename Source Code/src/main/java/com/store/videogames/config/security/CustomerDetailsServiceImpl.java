@@ -1,16 +1,14 @@
 package com.store.videogames.config.security;
 
 import com.store.videogames.exceptions.exception.CustomerNotFoundException;
-import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.interfaces.CustomerRepository;
+import com.store.videogames.entites.Customer;
+import com.store.videogames.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import javax.transaction.Transactional;
 
-@Transactional
 public class CustomerDetailsServiceImpl implements UserDetailsService
 {
     @Autowired
@@ -19,19 +17,13 @@ public class CustomerDetailsServiceImpl implements UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        Customer customer = customerRepository.getConfigUsername(username);
+        Customer customer = customerRepository.getCustomerByEmail(username);
 
         if (customer == null)
         {
-            try
-            {
-                throw new CustomerNotFoundException("Couldn't find the user");
-            }
-            catch (CustomerNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            throw new CustomerNotFoundException("Couldn't find the user");
         }
+
         return new CustomerDetailsImpl(customer);
     }
 }

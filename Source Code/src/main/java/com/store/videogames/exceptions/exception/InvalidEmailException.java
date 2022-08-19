@@ -8,6 +8,8 @@ public class InvalidEmailException extends RuntimeException
         this.message = message;
     }
     private InvalidEmailException(){}
+
+    @Override
     public String getMessage()
     {
         return message;

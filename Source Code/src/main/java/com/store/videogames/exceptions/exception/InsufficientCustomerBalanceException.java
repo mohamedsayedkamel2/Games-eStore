@@ -10,6 +10,7 @@ public class InsufficientCustomerBalanceException extends RuntimeException
     {
         this.message = message;
     }
+
     @Override
     public String getMessage()
     {

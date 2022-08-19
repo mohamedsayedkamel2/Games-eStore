@@ -1,8 +1,10 @@
 package com.store.videogames.service.customer.account;
 
-import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.interfaces.CustomerRepository;
-import com.store.videogames.util.interfaces.EmailUtil;
+import com.store.videogames.entites.Customer;
+import com.store.videogames.exceptions.exception.CustomerIsAlreadyEnabledException;
+import com.store.videogames.exceptions.exception.CustomerNotFoundException;
+import com.store.videogames.repository.CustomerRepository;
+import com.store.videogames.util.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -30,7 +32,7 @@ public class CustomerEmailService
     public void sendVerificationEmail(Customer customer, String siteURL) throws MessagingException, UnsupportedEncodingException
     {
         String toAddress = customer.getEmail();
-        String fromAddress = "momosayed057@gmail.com";
+        String fromAddress = "mohamedjustplz@gmail.com";
         String senderName = "Your company name";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
@@ -57,21 +59,49 @@ public class CustomerEmailService
 
     }
 
-    public boolean verify(String verificationCode)
+    public void verify(String verificationCode)
     {
         Customer customer = customerRepository.getCustomerByEmailVerificationCode(verificationCode);
-        System.out.println(customer);
-        System.out.println(customer.getEmailVerificationCode());
-        if (customer == null || customer.isEnabled())
+        if (customer == null)
         {
-            return false;
+            throw new CustomerNotFoundException("Customer was not found");
+        }
+        else if (customer.isEnabled())
+        {
+            throw new CustomerIsAlreadyEnabledException("Customer is already enabled!!");
         }
         else
         {
             customer.setEmailVerificationCode(null);
             customer.setEnabled(true);
             customerRepository.save(customer);
+        }
+    }
+
+    public boolean isEmailUnique(Integer id, String email)
+    {
+        Customer customer = customerRepository.getCustomerByEmail(email);
+        //If then customer is null then the email is avaliable if it's not NULL then the email is occuiped
+        if (customer == null)
+        {
             return true;
         }
+        boolean isNewCustomer = (id == null);
+        if (isNewCustomer == true)
+        {
+            //There is already a customer in this email
+            if (customer != null)
+            {
+                return false;
+            }
+            else
+            {
+                if (customer.getId() != id)
+                {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

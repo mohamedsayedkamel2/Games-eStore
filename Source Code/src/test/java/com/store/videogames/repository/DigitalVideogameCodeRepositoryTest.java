@@ -1,7 +1,6 @@
 package com.store.videogames.repository;
 
-import com.store.videogames.repository.entites.DigitalVideogameCode;
-import com.store.videogames.repository.interfaces.DigitalVideogameCodeRepository;
+import com.store.videogames.entites.DigitalVideogameCode;
 import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

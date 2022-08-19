@@ -1,7 +1,6 @@
 package com.store.videogames.repository;
 
-import com.store.videogames.repository.entites.Roles;
-import com.store.videogames.repository.interfaces.RolesRepository;
+import com.store.videogames.entites.Roles;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

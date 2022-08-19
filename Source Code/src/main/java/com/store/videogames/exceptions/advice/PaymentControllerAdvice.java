@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class PaymentControllerAdvice
 {
     @ExceptionHandler(value = InsufficientCustomerBalanceException.class)
-    public String getHello()
+    public String insufficientCustomerBalanceHandler()
     {
-        return "hello";
+        return "redirect:/customer/payment/error";
     }
 
     @ExceptionHandler(value = UnvalidVideogameQuantityException.class)

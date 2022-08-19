@@ -1,8 +1,8 @@
 package com.store.videogames.admin.controller.videogame;
 
-import com.store.videogames.repository.entites.Videogame;
-import com.store.videogames.repository.entites.enums.Platforms;
-import com.store.videogames.repository.interfaces.VideogameRepository;
+import com.store.videogames.entites.Videogame;
+import com.store.videogames.entites.enums.Platforms;
+import com.store.videogames.repository.VideogameRepository;
 import com.store.videogames.service.videogame.VideogameRetrivingService;
 import com.store.videogames.service.videogame.VideogameUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;

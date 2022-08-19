@@ -3,7 +3,6 @@ package com.store.videogames.config.security;
 import com.store.videogames.util.common.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,18 +15,16 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 
 import javax.sql.DataSource;
 
-@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired
     private DataSource dataSource;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     //This function will return a Bean Object which will help to enable login using Spring Data JPA
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService()
+    {
         return new CustomerDetailsServiceImpl();
     }
 
@@ -37,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder.getBcryptPasswordEncoder());
+        authenticationProvider.setPasswordEncoder(PasswordEncoder.getBcryptPasswordEncoder());
         return authenticationProvider;
     }
 
@@ -74,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests().antMatchers("/admin/customers/**").hasAuthority("ADMIN").
                 antMatchers("/logout", "/videogames/buy/**", "/customer/**").hasAuthority("USER").
                 and().exceptionHandling()
-                .accessDeniedPage("/404");
+                .accessDeniedPage("/403");
 
                 http.authorizeRequests().anyRequest().authenticated()
                 .and()

@@ -1,11 +1,8 @@
 package com.store.videogames.repository;
 
-import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.entites.Order;
-import com.store.videogames.repository.entites.Videogame;
-import com.store.videogames.repository.interfaces.CustomerRepository;
-import com.store.videogames.repository.interfaces.OrderRepository;
-import com.store.videogames.repository.interfaces.VideogameRepository;
+import com.store.videogames.entites.Customer;
+import com.store.videogames.entites.Order;
+import com.store.videogames.entites.Videogame;
 import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

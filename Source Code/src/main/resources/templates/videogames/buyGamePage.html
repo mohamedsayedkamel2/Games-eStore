@@ -14,11 +14,14 @@
 
         <label class="col-sm-4 col-form-Label">Your balance: [[${#authentication.getPrincipal().getCustomer().getBalance()}]]</label>
 
-    <p th:if="${videogame.isDigitallyAvaliable == true}">
-        <div class="form-check form-switch">
-        <input class="form-check-input" id="flexSwitchCheckDefault" type="checkbox" name="digital"/>Choose this option if you want a digital copy of the game
-    </div>
-    </p>
+
+        <tr th:each="paymentMethod : ${paymentMethods}">
+            <label class="col-sm-4 col-form-Label">
+            [[${paymentMethod}]]
+            </label>
+        </tr>
+
+
     <button type="submit" class="btn btn-dark">Buy</button>
     </div>
 </form>

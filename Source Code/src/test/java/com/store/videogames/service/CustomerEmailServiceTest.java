@@ -1,8 +1,8 @@
 package com.store.videogames.service;
 
-import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.interfaces.CustomerRepository;
-import com.store.videogames.util.interfaces.EmailUtil;
+import com.store.videogames.entites.Customer;
+import com.store.videogames.repository.CustomerRepository;
+import com.store.videogames.util.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;

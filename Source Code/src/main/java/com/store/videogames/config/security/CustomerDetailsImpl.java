@@ -1,19 +1,17 @@
 package com.store.videogames.config.security;
 
-import com.store.videogames.repository.entites.Customer;
-import com.store.videogames.repository.entites.Roles;
+import com.store.videogames.entites.Customer;
+import com.store.videogames.entites.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class CustomerDetailsImpl implements UserDetails
 {
-
     private Customer customer;
 
     public CustomerDetailsImpl(Customer customer)
@@ -39,7 +37,6 @@ public class CustomerDetailsImpl implements UserDetails
         return customer.getPassword();
     }
 
-    //I made it email currently until i make the user create a username
     @Override
     public String getUsername()
     {

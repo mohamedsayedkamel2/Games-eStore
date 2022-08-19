@@ -10,7 +10,7 @@ public class CustomerLoginController
     @GetMapping("/login")
     public String getLoginPage()
     {
-        if (AuthenticationChecker.checkIfAuthenticated() != true)
+        if (AuthenticationChecker.checkIfAuthenticated() == false)
         {
             return "/customer/login";
         }

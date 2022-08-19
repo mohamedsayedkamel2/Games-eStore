@@ -1,8 +1,8 @@
 package com.store.videogames.service.customer;
 
-import com.store.videogames.repository.entites.CustomerMoneyHistory;
-import com.store.videogames.repository.entites.Order;
-import com.store.videogames.repository.interfaces.CustomerMoneyHistoryRepository;
+import com.store.videogames.entites.CustomerMoneyHistory;
+import com.store.videogames.entites.Order;
+import com.store.videogames.repository.CustomerMoneyHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
