@@ -1,4 +1,4 @@
-package com.store.videogames.service.customer.payment;
+package com.store.videogames.service.payment;
 
 import com.store.videogames.entites.enums.PaymentMethod;
 

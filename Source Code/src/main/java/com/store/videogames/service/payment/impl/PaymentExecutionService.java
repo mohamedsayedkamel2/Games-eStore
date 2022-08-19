@@ -1,12 +1,12 @@
-package com.store.videogames.service.customer.payment.impl;
+package com.store.videogames.service.payment.impl;
 
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Videogame;
 import com.store.videogames.entites.enums.PaymentMethod;
 import com.store.videogames.exceptions.exception.EmailUnknownErrorException;
 import com.store.videogames.service.customer.account.CustomerMoneyService;
-import com.store.videogames.service.customer.payment.IPaymentMethodTypeFactory;
-import com.store.videogames.service.customer.payment.IPaymentService;
+import com.store.videogames.service.payment.IPaymentMethodTypeFactory;
+import com.store.videogames.service.payment.IPaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

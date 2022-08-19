@@ -1,4 +1,4 @@
-package com.store.videogames.service.customer.payment.order;
+package com.store.videogames.service.payment.order;
 
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Order;

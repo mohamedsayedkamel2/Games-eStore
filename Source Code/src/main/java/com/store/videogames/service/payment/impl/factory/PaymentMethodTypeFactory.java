@@ -1,11 +1,10 @@
-package com.store.videogames.service.customer.payment.impl.factory;
+package com.store.videogames.service.payment.impl.factory;
 
 import com.store.videogames.entites.enums.PaymentMethod;
-import com.store.videogames.service.customer.payment.IPaymentMethodTypeFactory;
-import com.store.videogames.service.customer.payment.IPaymentService;
-import com.store.videogames.service.customer.payment.impl.strategy.DigitalPaymentServiceStrategy;
-import com.store.videogames.service.customer.payment.impl.strategy.PhysicalPaymentServiceStrategy;
-import org.springframework.data.redis.core.index.RedisIndexDefinition;
+import com.store.videogames.service.payment.IPaymentMethodTypeFactory;
+import com.store.videogames.service.payment.IPaymentService;
+import com.store.videogames.service.payment.impl.strategy.DigitalPaymentServiceStrategy;
+import com.store.videogames.service.payment.impl.strategy.PhysicalPaymentServiceStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;

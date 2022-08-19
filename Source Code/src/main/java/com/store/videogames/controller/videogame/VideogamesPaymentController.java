@@ -5,7 +5,7 @@ import com.store.videogames.entites.enums.PaymentMethod;
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Videogame;
 import com.store.videogames.repository.VideogameRepository;
-import com.store.videogames.service.customer.payment.impl.PaymentExecutionService;
+import com.store.videogames.service.payment.impl.PaymentExecutionService;
 import com.store.videogames.service.videogame.VideogameRetrivingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

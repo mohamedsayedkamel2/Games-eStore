@@ -1,32 +1,29 @@
-package com.store.videogames.service.customer.payment.impl.strategy;
+package com.store.videogames.service.payment.impl.strategy;
 
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Order;
 import com.store.videogames.entites.Videogame;
-import com.store.videogames.exceptions.exception.EmailUnknownErrorException;
-import com.store.videogames.repository.DigitalVideogameCodeRepository;
 import com.store.videogames.service.customer.CustomerMoneyHistoryService;
 import com.store.videogames.service.customer.CustomerInformationRetriverService;
-import com.store.videogames.service.customer.payment.IPaymentService;
-import com.store.videogames.service.customer.payment.order.OrderService;
+import com.store.videogames.service.payment.IPaymentService;
+import com.store.videogames.service.payment.order.OrderService;
 import com.store.videogames.service.videogame.VideogameRetrivingService;
 import com.store.videogames.service.videogame.VideogameUpdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 @Service
+@Primary
 @Transactional
-public class DigitalPaymentServiceStrategy implements IPaymentService
+public class PhysicalPaymentServiceStrategy implements IPaymentService
 {
-    private final Logger logger = LoggerFactory.getLogger(DigitalPaymentServiceStrategy.class);
+    private final Logger logger = LoggerFactory.getLogger(PhysicalPaymentServiceStrategy.class);
 
-    @Autowired
-    private DigitalVideogameCodeRepository digitalVideogameCodeRepository;
     @Autowired
     private CustomerMoneyHistoryService customerMoneyHistoryService;
     @Autowired
@@ -38,17 +35,19 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
     @Autowired
     private OrderService orderService;
 
-    @Transactional
+    @Override
     public void buyProduct(Customer customer, Videogame videogame)
     {
         //store old customer balance
         float oldCustomerBalance = customer.getBalance();
         //update the customer balance after buying the videogame
         float newUserBalance = oldCustomerBalance - videogame.getPrice();
+        // Update the custoemr balance
         customer.setBalance(newUserBalance);
+        // Add the game to the customer's bought games list
         customer.addVideogame(videogame);
 
-        //update the customer record in the databse with the new data
+        //Update the customer record in the databse with the new data
         customerInformationRetriverService.saveCustomerIntoDB(customer);
 
         //update the videogame record in the database with the new data
@@ -58,9 +57,9 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
         Order order = orderService.createOrder(customer,videogame);
         customerMoneyHistoryService.createRecord(order, oldCustomerBalance,newUserBalance);
 
-        // Send Digital Order Mail
-        String mailSubject = "THANKS FOR BUYING A DIGITAL PRODUCT";
-        String mailBody = "THE PRODUCT NAME IS " + order.getVideogame().getGameName();
+        // Send Physical Order Mail
+        String mailSubject = "";
+        String mailBody = "";
         orderService.sendOrderMail(order.getCustomer().getEmail(), mailSubject, mailBody);
     }
 }
