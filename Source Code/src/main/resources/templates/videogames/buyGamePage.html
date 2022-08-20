@@ -15,11 +15,11 @@
         <label class="col-sm-4 col-form-Label">Your balance: [[${#authentication.getPrincipal().getCustomer().getBalance()}]]</label>
 
 
-        <tr th:each="paymentMethod : ${paymentMethods}">
-            <label class="col-sm-4 col-form-Label">
-            [[${paymentMethod}]]
-            </label>
-        </tr>
+        <th:block th:each="paymentMethod : ${paymentMethods}">
+            <input type="radio" class="m-2" name="paymentMethod" th:value="${paymentMethod}"/>
+            - <small>[[${paymentMethod}]]</small>
+            <br/>
+        </th:block>
 
 
     <button type="submit" class="btn btn-dark">Buy</button>

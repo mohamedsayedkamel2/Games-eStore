@@ -36,7 +36,6 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
     @Autowired
     private OrderService orderService;
 
-    @Transactional
     public void buyProduct(Customer customer, Videogame videogame)
     {
         //store old customer balance
@@ -47,7 +46,7 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
         customer.addVideogame(videogame);
 
         //update the customer record in the databse with the new data
-        customerInformationRetriverService.saveCustomerIntoDB(customer);
+        customerInformationRetriverService.updateCustomer(customer);
 
         //update the videogame record in the database with the new data
         videogameUpdateService.storeNewVideogame(videogame);

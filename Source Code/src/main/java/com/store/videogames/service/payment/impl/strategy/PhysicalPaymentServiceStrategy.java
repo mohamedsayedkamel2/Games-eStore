@@ -3,6 +3,7 @@ package com.store.videogames.service.payment.impl.strategy;
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Order;
 import com.store.videogames.entites.Videogame;
+import com.store.videogames.repository.CustomerRepository;
 import com.store.videogames.service.customer.CustomerMoneyHistoryService;
 import com.store.videogames.service.customer.CustomerInformationRetriverService;
 import com.store.videogames.service.payment.IPaymentService;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Primary
 @Transactional
 public class PhysicalPaymentServiceStrategy implements IPaymentService
 {
@@ -34,6 +34,8 @@ public class PhysicalPaymentServiceStrategy implements IPaymentService
     private VideogameUpdateService videogameUpdateService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Override
     public void buyProduct(Customer customer, Videogame videogame)
@@ -48,7 +50,7 @@ public class PhysicalPaymentServiceStrategy implements IPaymentService
         customer.addVideogame(videogame);
 
         //Update the customer record in the databse with the new data
-        customerInformationRetriverService.saveCustomerIntoDB(customer);
+        customerRepository.save(customer);
 
         //update the videogame record in the database with the new data
         videogameUpdateService.storeNewVideogame(videogame);

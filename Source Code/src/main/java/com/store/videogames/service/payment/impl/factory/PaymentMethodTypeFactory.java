@@ -5,18 +5,29 @@ import com.store.videogames.service.payment.IPaymentMethodTypeFactory;
 import com.store.videogames.service.payment.IPaymentService;
 import com.store.videogames.service.payment.impl.strategy.DigitalPaymentServiceStrategy;
 import com.store.videogames.service.payment.impl.strategy.PhysicalPaymentServiceStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-@Component
+@Service
 public class PaymentMethodTypeFactory implements IPaymentMethodTypeFactory
 {
     private final Map<PaymentMethod, IPaymentService> paymentMethodsMap;
 
-    public PaymentMethodTypeFactory()
+    private DigitalPaymentServiceStrategy digitalPaymentServiceStrategy;
+    private PhysicalPaymentServiceStrategy physicalPaymentServiceStrategy;
+
+    @Autowired
+    public PaymentMethodTypeFactory(DigitalPaymentServiceStrategy digitalPaymentServiceStrategy, PhysicalPaymentServiceStrategy physicalPaymentServiceStrategy)
     {
+        this.digitalPaymentServiceStrategy = digitalPaymentServiceStrategy;
+        this.physicalPaymentServiceStrategy = physicalPaymentServiceStrategy;
+
         paymentMethodsMap = new EnumMap<>(PaymentMethod.class);
         intialise();
     }
@@ -33,7 +44,7 @@ public class PaymentMethodTypeFactory implements IPaymentMethodTypeFactory
 
     private void intialise()
     {
-        paymentMethodsMap.put(PaymentMethod.DIGITAL, new DigitalPaymentServiceStrategy());
-        paymentMethodsMap.put(PaymentMethod.PHYSICAL, new PhysicalPaymentServiceStrategy());
+        paymentMethodsMap.put(PaymentMethod.DIGITAL, digitalPaymentServiceStrategy);
+        paymentMethodsMap.put(PaymentMethod.PHYSICAL, physicalPaymentServiceStrategy);
     }
 }

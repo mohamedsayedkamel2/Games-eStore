@@ -25,10 +25,17 @@ public class PaymentExecutionService
     @Autowired
     private IPaymentMethodTypeFactory iPaymentMethodTypeFactory;
 
+    @Autowired
+    public PaymentExecutionService(IPaymentMethodTypeFactory paymentMethodTypeFactory)
+    {
+        this.iPaymentMethodTypeFactory = paymentMethodTypeFactory;
+    }
+
     public void buyGame(Customer customer, Videogame videogame, PaymentMethod paymentMethod)
     {
         customerMoneyService.isBalanceSufficentChecker(videogame.getPrice(), customer.getBalance());
         IPaymentService customerPaymentService = iPaymentMethodTypeFactory.getPaymentMethodService(paymentMethod);
+        System.out.println(customerPaymentService);
         try
         {
             customerPaymentService.buyProduct(customer, videogame);
