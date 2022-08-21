@@ -20,14 +20,16 @@ import java.io.UnsupportedEncodingException;
 public class CustomerEmailService
 {
     //To avoid a bean dependancy cycle I will use CustomerRepository instead of CustomerService
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+    private final EmailUtil emailUtil;
+    private final JavaMailSender javaMailSender;
 
-    @Autowired
-    private EmailUtil emailUtil;
-
-    @Autowired
-    private JavaMailSender javaMailSender;
+    public CustomerEmailService(CustomerRepository customerRepository, EmailUtil emailUtil, JavaMailSender javaMailSender)
+    {
+        this.customerRepository = customerRepository;
+        this.emailUtil = emailUtil;
+        this.javaMailSender = javaMailSender;
+    }
 
     public void sendVerificationEmail(Customer customer, String siteURL) throws MessagingException, UnsupportedEncodingException
     {

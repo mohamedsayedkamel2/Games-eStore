@@ -17,8 +17,13 @@ import java.util.List;
 @RequestMapping("/videogames")
 public class VideogamesDisplayerController
 {
+    private final VideogameRetrivingService videogameRetrivingService;
+
     @Autowired
-    private VideogameRetrivingService videogameRetrivingService;
+    public VideogamesDisplayerController(VideogameRetrivingService videogameRetrivingService)
+    {
+        this.videogameRetrivingService = videogameRetrivingService;
+    }
 
     @GetMapping
     public String getAllVidoegames(Model model)

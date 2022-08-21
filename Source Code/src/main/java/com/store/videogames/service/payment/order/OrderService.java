@@ -18,10 +18,15 @@ import java.time.LocalTime;
 @Service
 public class OrderService
 {
+    private final OrderRepository orderRepository;
+    private final EmailUtil emailUtil;
+
     @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private EmailUtil emailUtil;
+    public OrderService(OrderRepository orderRepository, EmailUtil emailUtil)
+    {
+        this.orderRepository = orderRepository;
+        this.emailUtil = emailUtil;
+    }
 
     @Transactional
     public Order createOrder(Customer customer, Videogame videogame)

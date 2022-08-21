@@ -24,12 +24,19 @@ import java.util.List;
 @RequestMapping("/admin/customers")
 public class CustomerManagementController
 {
-    @Autowired
     private CustomerInformationUpdaterService customerInformationUpdaterService;
-    @Autowired
     private CustomerInformationRetriverService customerInformationRetriverService;
-    @Autowired
     private RolesRepository rolesRepository;
+
+    @Autowired
+    public CustomerManagementController(CustomerInformationUpdaterService customerInformationUpdaterService,
+                                        CustomerInformationRetriverService customerInformationRetriverService,
+                                        RolesRepository rolesRepository)
+    {
+        this.customerInformationUpdaterService = customerInformationUpdaterService;
+        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.rolesRepository = rolesRepository;
+    }
 
     @GetMapping
     public String getAllCustomers(Model model)

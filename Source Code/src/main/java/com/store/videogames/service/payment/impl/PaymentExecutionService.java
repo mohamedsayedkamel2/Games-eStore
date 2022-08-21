@@ -20,15 +20,14 @@ public class PaymentExecutionService
 {
     private static final Logger logger = LoggerFactory.getLogger(PaymentExecutionService.class);
 
-    @Autowired
-    private CustomerMoneyService customerMoneyService;
-    @Autowired
-    private IPaymentMethodTypeFactory iPaymentMethodTypeFactory;
+    private final CustomerMoneyService customerMoneyService;
+    private final IPaymentMethodTypeFactory iPaymentMethodTypeFactory;
 
     @Autowired
-    public PaymentExecutionService(IPaymentMethodTypeFactory paymentMethodTypeFactory)
+    public PaymentExecutionService(IPaymentMethodTypeFactory paymentMethodTypeFactory, CustomerMoneyService customerMoneyService)
     {
         this.iPaymentMethodTypeFactory = paymentMethodTypeFactory;
+		this.customerMoneyService = customerMoneyService;
     }
 
     public void buyGame(Customer customer, Videogame videogame, PaymentMethod paymentMethod)

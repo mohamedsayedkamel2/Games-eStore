@@ -18,10 +18,15 @@ import javax.validation.Valid;
 @Controller
 public class CustomerRegistrationController 
 {
-    @Autowired
     private CustomerInformationRetriverService customerInformationRetriverService;
-    @Autowired
     private CustomerRegistrationService customerRegistrationService;
+
+    @Autowired
+    public CustomerRegistrationController(CustomerInformationRetriverService customerInformationRetriverService, CustomerRegistrationService customerRegistrationService)
+    {
+        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerRegistrationService = customerRegistrationService;
+    }
 
     @GetMapping("/customer/register")
     public String getNewCustomerPage(@ModelAttribute("customer") Customer customer)

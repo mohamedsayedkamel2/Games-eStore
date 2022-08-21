@@ -23,18 +23,28 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
 {
     private final Logger logger = LoggerFactory.getLogger(DigitalPaymentServiceStrategy.class);
 
+    private final DigitalVideogameCodeRepository digitalVideogameCodeRepository;
+    private final CustomerMoneyHistoryService customerMoneyHistoryService;
+    private final CustomerInformationRetriverService customerInformationRetriverService;
+    private final VideogameRetrivingService videogameRetrivingService;
+    private final VideogameUpdateService videogameUpdateService;
+    private final OrderService orderService;
+
     @Autowired
-    private DigitalVideogameCodeRepository digitalVideogameCodeRepository;
-    @Autowired
-    private CustomerMoneyHistoryService customerMoneyHistoryService;
-    @Autowired
-    private CustomerInformationRetriverService customerInformationRetriverService;
-    @Autowired
-    private VideogameRetrivingService videogameRetrivingService;
-    @Autowired
-    private VideogameUpdateService videogameUpdateService;
-    @Autowired
-    private OrderService orderService;
+    public DigitalPaymentServiceStrategy(DigitalVideogameCodeRepository digitalVideogameCodeRepository,
+                                         CustomerMoneyHistoryService customerMoneyHistoryService,
+                                         CustomerInformationRetriverService customerInformationRetriverService,
+                                         VideogameRetrivingService videogameRetrivingService,
+                                         VideogameUpdateService videogameUpdateService,
+                                         OrderService orderService)
+    {
+        this.digitalVideogameCodeRepository = digitalVideogameCodeRepository;
+        this.customerMoneyHistoryService = customerMoneyHistoryService;
+        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.videogameRetrivingService = videogameRetrivingService;
+        this.videogameUpdateService = videogameUpdateService;
+        this.orderService = orderService;
+    }
 
     public void buyProduct(Customer customer, Videogame videogame)
     {

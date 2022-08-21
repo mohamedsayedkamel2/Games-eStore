@@ -11,8 +11,13 @@ import javax.transaction.Transactional;
 @Service
 public class CustomerMoneyHistoryService
 {
+    private final CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
+
     @Autowired
-    private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
+    CustomerMoneyHistoryService(CustomerMoneyHistoryRepository customerMoneyHistoryRepository)
+    {
+        this.customerMoneyHistoryRepository = customerMoneyHistoryRepository;
+    }
 
     @Transactional
     public void createRecord(Order order, float moneyAmountBeforeOrder, float moneyAmountAfterOrder)

@@ -21,10 +21,16 @@ import java.util.List;
 @Transactional
 public class CustomerInformationRetriverService
 {
+    private final CustomerRepository customerRepository;
+    private final CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
+
     @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
+    public CustomerInformationRetriverService(CustomerRepository customerRepository,
+                                              CustomerMoneyHistoryRepository customerMoneyHistoryRepository)
+    {
+        this.customerRepository = customerRepository;
+        this.customerMoneyHistoryRepository = customerMoneyHistoryRepository;
+    }
 
     public Customer getCustomerById(int id)
     {

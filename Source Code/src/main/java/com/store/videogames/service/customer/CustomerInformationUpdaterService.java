@@ -10,8 +10,12 @@ import javax.transaction.Transactional;
 @Service
 public class CustomerInformationUpdaterService
 {
+    private final CustomerRepository customerRepository;
     @Autowired
-    private CustomerRepository customerRepository;
+    CustomerInformationUpdaterService(CustomerRepository customerRepository)
+    {
+        this.customerRepository = customerRepository;
+    }
 
     @CachePut("Customer")
     @Transactional

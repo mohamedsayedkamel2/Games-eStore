@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class CustomerProfileVerificationController
 {
+    private final CustomerEmailService customerEmailService;
+
     @Autowired
-    private CustomerEmailService customerEmailService;
+    public CustomerProfileVerificationController(CustomerEmailService customerEmailService)
+    {
+        this.customerEmailService = customerEmailService;
+    }
 
     @GetMapping("/verify")
     public String verifyUser(@RequestParam("code") String code)

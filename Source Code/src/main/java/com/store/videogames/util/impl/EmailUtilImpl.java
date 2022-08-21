@@ -15,28 +15,31 @@ import javax.mail.internet.MimeMessage;
 @EnableAsync
 public class EmailUtilImpl implements EmailUtil
 {
-        @Autowired
-        private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
-        @Override
-        @Async
-        public void sendEmail(String toEmailAddress, String subject, String body) throws MessagingException
+    @Autowired
+    public EmailUtilImpl(JavaMailSender javaMailSender)
+    {
+        this.javaMailSender = javaMailSender;
+    }
+
+    @Override
+    @Async
+    public void sendEmail(String toEmailAddress, String subject, String body) throws MessagingException
+    {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+        // configure the message information (The reciver, the subject and the body of the message)
+        mimeMessageHelper.setTo(toEmailAddress);
+        mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setText(body);
+        try
         {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
-
-            // configure the message information (The reciver, the subject and the body of the message)
-            mimeMessageHelper.setTo(toEmailAddress);
-            mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText(body);
-
-            try
-            {
-                javaMailSender.send(message);
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-            }
+            javaMailSender.send(message);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
     }
 }

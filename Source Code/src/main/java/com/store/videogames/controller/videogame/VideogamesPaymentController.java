@@ -23,12 +23,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/videogames")
 public class VideogamesPaymentController
 {
+    private final VideogameRetrivingService videogameRetrivingService;
+    private final VideogameRepository videogameRepository;
+    private final PaymentExecutionService paymentExecutionService;
+
     @Autowired
-    private VideogameRetrivingService videogameRetrivingService;
-    @Autowired
-    private VideogameRepository videogameRepository;
-    @Autowired
-    private PaymentExecutionService paymentExecutionService;
+    public VideogamesPaymentController(VideogameRetrivingService videogameRetrivingService,
+                                       VideogameRepository videogameRepository,
+                                       PaymentExecutionService paymentExecutionService)
+    {
+        this.videogameRetrivingService = videogameRetrivingService;
+        this.videogameRepository = videogameRepository;
+        this.paymentExecutionService = paymentExecutionService;
+    }
+
 
     @GetMapping("/buy/{id}")
     public String buyVideogame(@PathVariable("id") int id, RedirectAttributes redirectAttributes, Model model)

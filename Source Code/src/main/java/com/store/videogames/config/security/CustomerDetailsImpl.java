@@ -2,6 +2,7 @@ package com.store.videogames.config.security;
 
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Roles;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,8 +13,9 @@ import java.util.List;
 
 public class CustomerDetailsImpl implements UserDetails
 {
-    private Customer customer;
+    private final Customer customer;
 
+    @Autowired
     public CustomerDetailsImpl(Customer customer)
     {
         this.customer = customer;

@@ -24,18 +24,25 @@ public class PhysicalPaymentServiceStrategy implements IPaymentService
 {
     private final Logger logger = LoggerFactory.getLogger(PhysicalPaymentServiceStrategy.class);
 
-    @Autowired
     private CustomerMoneyHistoryService customerMoneyHistoryService;
-    @Autowired
     private CustomerInformationRetriverService customerInformationRetriverService;
-    @Autowired
     private VideogameRetrivingService videogameRetrivingService;
-    @Autowired
     private VideogameUpdateService videogameUpdateService;
-    @Autowired
     private OrderService orderService;
+
     @Autowired
-    private CustomerRepository customerRepository;
+    public PhysicalPaymentServiceStrategy(CustomerMoneyHistoryService customerMoneyHistoryService,
+                                          CustomerInformationRetriverService customerInformationRetriverService,
+                                          VideogameRetrivingService videogameRetrivingService,
+                                          VideogameUpdateService videogameUpdateService,
+                                          OrderService orderService)
+    {
+        this.customerMoneyHistoryService = customerMoneyHistoryService;
+        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.videogameRetrivingService = videogameRetrivingService;
+        this.videogameUpdateService = videogameUpdateService;
+        this.orderService = orderService;
+    }
 
     @Override
     public void buyProduct(Customer customer, Videogame videogame)
@@ -50,7 +57,7 @@ public class PhysicalPaymentServiceStrategy implements IPaymentService
         customer.addVideogame(videogame);
 
         //Update the customer record in the databse with the new data
-        customerRepository.save(customer);
+        customerInformationRetriverService.updateCustomer(customer);
 
         //update the videogame record in the database with the new data
         videogameUpdateService.storeNewVideogame(videogame);

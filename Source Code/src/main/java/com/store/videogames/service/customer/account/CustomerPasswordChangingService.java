@@ -13,8 +13,13 @@ import javax.transaction.Transactional;
 @Transactional
 public class CustomerPasswordChangingService
 {
+    private final CustomerInformationRetriverService customerInformationRetriverService;
+
     @Autowired
-    private CustomerInformationRetriverService customerInformationRetriverService;
+    public CustomerPasswordChangingService(CustomerInformationRetriverService customerInformationRetriverService)
+    {
+        this.customerInformationRetriverService = customerInformationRetriverService;
+    }
 
     public void updateResetPasswordToken(String token, String email)
     {

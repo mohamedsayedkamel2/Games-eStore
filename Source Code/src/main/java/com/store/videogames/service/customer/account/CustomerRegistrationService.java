@@ -24,18 +24,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-//If any exception happens just rollback
-@Transactional(rollbackOn = {Exception.class})
+@Transactional
 public class CustomerRegistrationService
 {
+    private final CustomerInformationRetriverService customerInformationRetriverService;
+    private final CustomerRepository customerRepository;
+    private final RolesRepository rolesRepository;
+    private final CustomerEmailService customerEmailService;
+
     @Autowired
-    private CustomerInformationRetriverService customerInformationRetriverService;
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private RolesRepository rolesRepository;
-    @Autowired
-    private CustomerEmailService customerEmailService;
+    public CustomerRegistrationService(CustomerInformationRetriverService customerInformationRetriverService,
+                                       CustomerRepository customerRepository,
+                                       RolesRepository rolesRepository,
+                                       CustomerEmailService customerEmailService)
+    {
+        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerRepository = customerRepository;
+        this.rolesRepository = rolesRepository;
+        this.customerEmailService = customerEmailService;
+    }
 
     //Customer registration process function
     @CachePut("Customer")

@@ -23,12 +23,19 @@ import java.util.List;
 @RequestMapping("/admin/games")
 public class VideogameManagementController
 {
+    private final VideogameRetrivingService videogameRetrivingService;
+    private final VideogameRepository videogameRepository;
+    private final VideogameUpdateService videogameUpdateService;
+
     @Autowired
-    private VideogameRetrivingService videogameRetrivingService;
-    @Autowired
-    private VideogameRepository videogameRepository;
-    @Autowired
-    private VideogameUpdateService videogameUpdateService;
+    public VideogameManagementController(VideogameRetrivingService videogameRetrivingService,
+                                         VideogameRepository videogameRepository,
+                                         VideogameUpdateService videogameUpdateService)
+    {
+        this.videogameRetrivingService = videogameRetrivingService;
+        this.videogameRepository = videogameRepository;
+        this.videogameUpdateService = videogameUpdateService;
+    }
 
     //The create section
 
