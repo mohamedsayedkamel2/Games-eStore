@@ -1,11 +1,11 @@
 package com.store.videogames.controller.customer.login;
 
 import com.store.videogames.exceptions.exception.InvalidPasswordRestToken;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
 import com.store.videogames.service.customer.account.CustomerPasswordChangingService;
-import com.store.videogames.util.common.WebsiteUrlGetter;
-import com.store.videogames.entites.Customer;
 import com.store.videogames.util.EmailUtil;
+import com.store.videogames.util.PageUrlGetter;
+import com.store.videogames.entites.Customer;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,19 +19,19 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 
 @Controller
-public class ForgotPasswordController
+public class ForgotPassword
 {
     private final EmailUtil emailUtil;
-    private final CustomerInformationRetriverService customerInformationRetriverService;
+    private final CustomerInfoRetriver customerInfoRetriver;
     private final CustomerPasswordChangingService customerPasswordChangingService;
 
     @Autowired
-    public ForgotPasswordController(EmailUtil emailUtil,
-                                    CustomerInformationRetriverService customerInformationRetriverService,
-                                    CustomerPasswordChangingService customerPasswordChangingService)
+    public ForgotPassword(EmailUtil emailUtil,
+                          CustomerInfoRetriver customerInfoRetriver,
+                          CustomerPasswordChangingService customerPasswordChangingService)
     {
         this.emailUtil = emailUtil;
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerInfoRetriver = customerInfoRetriver;
         this.customerPasswordChangingService = customerPasswordChangingService;
     }
 
@@ -47,7 +47,7 @@ public class ForgotPasswordController
         String email = request.getParameter("email");
         String token = RandomString.make(30);
         customerPasswordChangingService.updateResetPasswordToken(token, email);
-        String resetPasswordLink = WebsiteUrlGetter.getSiteURL(request) + "/reset_password?token=" + token;
+        String resetPasswordLink = PageUrlGetter.getSiteURL(request) + "/reset_password?token=" + token;
         sendEmail(email, resetPasswordLink);
         System.out.println("Email sent successfuly");
         model.addAttribute("message", "We have sent a reset password link to your email. Please check.");
@@ -71,7 +71,7 @@ public class ForgotPasswordController
     @GetMapping("/reset_password")
     public String showResetPasswordForm(@RequestParam("token") String token, Model model)
     {
-        Customer customer = customerInformationRetriverService.getCustomerByResetPasswordToken(token);
+        Customer customer = customerInfoRetriver.getCustomerByResetPasswordToken(token);
         model.addAttribute("token", token);
         if (customer == null)
         {
@@ -87,7 +87,7 @@ public class ForgotPasswordController
         String token = request.getParameter("token");
         String password = request.getParameter("password");
 
-        Customer customer = customerInformationRetriverService.getCustomerByResetPasswordToken(token);
+        Customer customer = customerInfoRetriver.getCustomerByResetPasswordToken(token);
         model.addAttribute("title", "Reset your password");
 
         if (customer == null)

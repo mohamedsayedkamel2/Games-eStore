@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-public class CustomerInformationUpdaterService
+public class CustomerInformationUpdater
 {
     private final CustomerRepository customerRepository;
     @Autowired
-    CustomerInformationUpdaterService(CustomerRepository customerRepository)
+    CustomerInformationUpdater(CustomerRepository customerRepository)
     {
         this.customerRepository = customerRepository;
     }

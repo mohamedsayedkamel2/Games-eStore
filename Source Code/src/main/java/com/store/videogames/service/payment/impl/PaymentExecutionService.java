@@ -5,8 +5,8 @@ import com.store.videogames.entites.Videogame;
 import com.store.videogames.entites.enums.PaymentMethod;
 import com.store.videogames.exceptions.exception.EmailUnknownErrorException;
 import com.store.videogames.service.customer.account.CustomerMoneyService;
-import com.store.videogames.service.payment.IPaymentMethodTypeFactory;
 import com.store.videogames.service.payment.IPaymentService;
+import com.store.videogames.service.payment.impl.factory.PaymentMethodTypeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +21,19 @@ public class PaymentExecutionService
     private static final Logger logger = LoggerFactory.getLogger(PaymentExecutionService.class);
 
     private final CustomerMoneyService customerMoneyService;
-    private final IPaymentMethodTypeFactory iPaymentMethodTypeFactory;
+    private final PaymentMethodTypeFactory paymentMethodTypeFactory;
 
     @Autowired
-    public PaymentExecutionService(IPaymentMethodTypeFactory paymentMethodTypeFactory, CustomerMoneyService customerMoneyService)
+    public PaymentExecutionService(PaymentMethodTypeFactory paymentMethodTypeFactory, CustomerMoneyService customerMoneyService)
     {
-        this.iPaymentMethodTypeFactory = paymentMethodTypeFactory;
+        this.paymentMethodTypeFactory = paymentMethodTypeFactory;
 		this.customerMoneyService = customerMoneyService;
     }
 
     public void buyGame(Customer customer, Videogame videogame, PaymentMethod paymentMethod)
     {
         customerMoneyService.isBalanceSufficentChecker(videogame.getPrice(), customer.getBalance());
-        IPaymentService customerPaymentService = iPaymentMethodTypeFactory.getPaymentMethodService(paymentMethod);
-        System.out.println(customerPaymentService);
+        IPaymentService customerPaymentService = paymentMethodTypeFactory.getPaymentMethodService(paymentMethod);
         try
         {
             customerPaymentService.buyProduct(customer, videogame);

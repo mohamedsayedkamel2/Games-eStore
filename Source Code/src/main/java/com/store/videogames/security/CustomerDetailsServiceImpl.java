@@ -1,4 +1,4 @@
-package com.store.videogames.config.security;
+package com.store.videogames.security;
 
 import com.store.videogames.exceptions.exception.CustomerNotFoundException;
 import com.store.videogames.entites.Customer;

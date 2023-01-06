@@ -4,8 +4,8 @@ import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Order;
 import com.store.videogames.entites.Videogame;
 import com.store.videogames.repository.DigitalVideogameCodeRepository;
-import com.store.videogames.service.customer.CustomerMoneyHistoryService;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
+import com.store.videogames.service.customer.CustomerMoneyHistorySaver;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
 import com.store.videogames.service.payment.IPaymentService;
 import com.store.videogames.service.payment.order.OrderService;
 import com.store.videogames.service.videogame.VideogameRetrivingService;
@@ -24,23 +24,23 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
     private final Logger logger = LoggerFactory.getLogger(DigitalPaymentServiceStrategy.class);
 
     private final DigitalVideogameCodeRepository digitalVideogameCodeRepository;
-    private final CustomerMoneyHistoryService customerMoneyHistoryService;
-    private final CustomerInformationRetriverService customerInformationRetriverService;
+    private final CustomerMoneyHistorySaver customerMoneyHistorySaver;
+    private final CustomerInfoRetriver customerInfoRetriver;
     private final VideogameRetrivingService videogameRetrivingService;
     private final VideogameUpdateService videogameUpdateService;
     private final OrderService orderService;
 
     @Autowired
     public DigitalPaymentServiceStrategy(DigitalVideogameCodeRepository digitalVideogameCodeRepository,
-                                         CustomerMoneyHistoryService customerMoneyHistoryService,
-                                         CustomerInformationRetriverService customerInformationRetriverService,
+                                         CustomerMoneyHistorySaver customerMoneyHistorySaver,
+                                         CustomerInfoRetriver customerInfoRetriver,
                                          VideogameRetrivingService videogameRetrivingService,
                                          VideogameUpdateService videogameUpdateService,
                                          OrderService orderService)
     {
         this.digitalVideogameCodeRepository = digitalVideogameCodeRepository;
-        this.customerMoneyHistoryService = customerMoneyHistoryService;
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerMoneyHistorySaver = customerMoneyHistorySaver;
+        this.customerInfoRetriver = customerInfoRetriver;
         this.videogameRetrivingService = videogameRetrivingService;
         this.videogameUpdateService = videogameUpdateService;
         this.orderService = orderService;
@@ -56,14 +56,14 @@ public class DigitalPaymentServiceStrategy implements IPaymentService
         customer.addVideogame(videogame);
 
         //update the customer record in the databse with the new data
-        customerInformationRetriverService.updateCustomer(customer);
+        customerInfoRetriver.updateCustomer(customer);
 
         //update the videogame record in the database with the new data
         videogameUpdateService.storeNewVideogame(videogame);
 
         //create an order and a history record of the user balance before and after the payment
         Order order = orderService.createOrder(customer,videogame);
-        customerMoneyHistoryService.createRecord(order, oldCustomerBalance,newUserBalance);
+        customerMoneyHistorySaver.presistPaymentRecord(order, oldCustomerBalance,newUserBalance);
 
         // Send Digital Order Mail
         String mailSubject = "THANKS FOR BUYING A DIGITAL PRODUCT";

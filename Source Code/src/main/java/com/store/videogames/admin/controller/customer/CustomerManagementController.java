@@ -4,9 +4,9 @@ import com.store.videogames.exceptions.exception.CustomerNotFoundException;
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Roles;
 import com.store.videogames.repository.RolesRepository;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
-import com.store.videogames.service.customer.CustomerInformationUpdaterService;
-import com.store.videogames.util.common.PasswordEncoder;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
+import com.store.videogames.service.customer.CustomerInformationUpdater;
+import com.store.videogames.security.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,24 +24,24 @@ import java.util.List;
 @RequestMapping("/admin/customers")
 public class CustomerManagementController
 {
-    private CustomerInformationUpdaterService customerInformationUpdaterService;
-    private CustomerInformationRetriverService customerInformationRetriverService;
+    private CustomerInformationUpdater customerInformationUpdater;
+    private CustomerInfoRetriver customerInfoRetriver;
     private RolesRepository rolesRepository;
 
     @Autowired
-    public CustomerManagementController(CustomerInformationUpdaterService customerInformationUpdaterService,
-                                        CustomerInformationRetriverService customerInformationRetriverService,
+    public CustomerManagementController(CustomerInformationUpdater customerInformationUpdater,
+                                        CustomerInfoRetriver customerInfoRetriver,
                                         RolesRepository rolesRepository)
     {
-        this.customerInformationUpdaterService = customerInformationUpdaterService;
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerInformationUpdater = customerInformationUpdater;
+        this.customerInfoRetriver = customerInfoRetriver;
         this.rolesRepository = rolesRepository;
     }
 
     @GetMapping
     public String getAllCustomers(Model model)
     {
-        List<Customer> customerList = customerInformationRetriverService.getAll();
+        List<Customer> customerList = customerInfoRetriver.getAll();
         model.addAttribute("listCustomers", customerList);
         return "/admin/customers/getAllCustomers";
     }
@@ -64,7 +64,7 @@ public class CustomerManagementController
         customer.setPassword(PasswordEncoder.getBcryptPasswordEncoder().encode(customer.getPassword()));
         customer.setRegistrationDate(LocalDate.now());
         customer.setRegistrationTime(LocalTime.now());
-        customerInformationRetriverService.saveCustomerIntoDB(customer);
+        customerInfoRetriver.saveCustomerIntoDB(customer);
         redirectAttributes.addFlashAttribute("message", "The user had been saved successfuly!");
         return "redirect:/admin/customers";
     }
@@ -74,7 +74,7 @@ public class CustomerManagementController
     {
         try
         {
-            Customer customer = customerInformationRetriverService.getCustomerById(id);
+            Customer customer = customerInfoRetriver.getCustomerById(id);
             List<Roles> rolesList = rolesRepository.findAll();
             model.addAttribute("customer",customer);
             model.addAttribute("pageTitle","Edit customer ID: " + customer.getId());
@@ -92,7 +92,7 @@ public class CustomerManagementController
     @PostMapping("/update")
     public String updateCustomer(Customer customer, RedirectAttributes redirectAttributes)
     {
-        Customer existingCustomer = customerInformationRetriverService.getCustomerById(customer.getId());
+        Customer existingCustomer = customerInfoRetriver.getCustomerById(customer.getId());
         existingCustomer.setFirstName(customer.getFirstName());
         existingCustomer.setLastName(customer.getLastName());
         existingCustomer.setEnabled(customer.isEnabled());
@@ -109,7 +109,7 @@ public class CustomerManagementController
             existingCustomer.setRoles(customer.getRoles());
         }
         existingCustomer.setBalance(existingCustomer.getBalance());
-        customerInformationRetriverService.updateCustomer(existingCustomer);
+        customerInfoRetriver.updateCustomer(existingCustomer);
         redirectAttributes.addFlashAttribute("message", "The user ID: " + customer.getId() + " Had been updated successfuly!");
         return "redirect:/admin/customers";
     }
@@ -118,7 +118,7 @@ public class CustomerManagementController
     @GetMapping("/changeEnable/{id}/enabled/{status}")
     public String changeEnableStatus(@PathVariable("id") int id, @PathVariable("status") boolean status, RedirectAttributes redirectAttributes)
     {
-        customerInformationUpdaterService.changeCustomerEnabledState(id,status);
+        customerInformationUpdater.changeCustomerEnabledState(id,status);
         String isEnabledStatus = status ? "Enabled" : "Disabled";
         String message = "User id: " + id + " has been " + isEnabledStatus;
         redirectAttributes.addFlashAttribute("message",message);

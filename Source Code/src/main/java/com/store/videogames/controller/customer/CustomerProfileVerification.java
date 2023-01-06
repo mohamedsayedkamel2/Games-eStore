@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public class CustomerProfileVerificationController
+public class CustomerProfileVerification
 {
     private final CustomerEmailService customerEmailService;
 
     @Autowired
-    public CustomerProfileVerificationController(CustomerEmailService customerEmailService)
+    public CustomerProfileVerification(CustomerEmailService customerEmailService)
     {
         this.customerEmailService = customerEmailService;
     }

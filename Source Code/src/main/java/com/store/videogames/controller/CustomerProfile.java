@@ -1,6 +1,6 @@
 package com.store.videogames.controller;
 
-import com.store.videogames.config.security.CustomerDetailsImpl;
+import com.store.videogames.security.CustomerDetailsImpl;
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Order;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequestMapping("/customer")
 @Controller
-public class CustomerProfileController
+public class CustomerProfile
 {
     @GetMapping("/games")
     public String getCustomerGames(@AuthenticationPrincipal CustomerDetailsImpl customerDetailsImpl, Model model, RedirectAttributes redirectAttributes)

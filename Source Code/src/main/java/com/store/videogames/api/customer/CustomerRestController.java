@@ -1,6 +1,5 @@
 package com.store.videogames.api.customer;
 
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
 import com.store.videogames.service.customer.account.CustomerEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,8 +1,8 @@
-package com.store.videogames.util.common;
+package com.store.videogames.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class WebsiteUrlGetter
+public class PageUrlGetter
 {
     public static String getSiteURL(HttpServletRequest request)
     {

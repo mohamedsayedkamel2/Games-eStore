@@ -3,9 +3,8 @@ package com.store.videogames.service.payment.impl.strategy;
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Order;
 import com.store.videogames.entites.Videogame;
-import com.store.videogames.repository.CustomerRepository;
-import com.store.videogames.service.customer.CustomerMoneyHistoryService;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
+import com.store.videogames.service.customer.CustomerMoneyHistorySaver;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
 import com.store.videogames.service.payment.IPaymentService;
 import com.store.videogames.service.payment.order.OrderService;
 import com.store.videogames.service.videogame.VideogameRetrivingService;
@@ -13,7 +12,6 @@ import com.store.videogames.service.videogame.VideogameUpdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,21 +22,21 @@ public class PhysicalPaymentServiceStrategy implements IPaymentService
 {
     private final Logger logger = LoggerFactory.getLogger(PhysicalPaymentServiceStrategy.class);
 
-    private CustomerMoneyHistoryService customerMoneyHistoryService;
-    private CustomerInformationRetriverService customerInformationRetriverService;
+    private CustomerMoneyHistorySaver customerMoneyHistorySaver;
+    private CustomerInfoRetriver customerInfoRetriver;
     private VideogameRetrivingService videogameRetrivingService;
     private VideogameUpdateService videogameUpdateService;
     private OrderService orderService;
 
     @Autowired
-    public PhysicalPaymentServiceStrategy(CustomerMoneyHistoryService customerMoneyHistoryService,
-                                          CustomerInformationRetriverService customerInformationRetriverService,
+    public PhysicalPaymentServiceStrategy(CustomerMoneyHistorySaver customerMoneyHistorySaver,
+                                          CustomerInfoRetriver customerInfoRetriver,
                                           VideogameRetrivingService videogameRetrivingService,
                                           VideogameUpdateService videogameUpdateService,
                                           OrderService orderService)
     {
-        this.customerMoneyHistoryService = customerMoneyHistoryService;
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerMoneyHistorySaver = customerMoneyHistorySaver;
+        this.customerInfoRetriver = customerInfoRetriver;
         this.videogameRetrivingService = videogameRetrivingService;
         this.videogameUpdateService = videogameUpdateService;
         this.orderService = orderService;
@@ -57,14 +55,14 @@ public class PhysicalPaymentServiceStrategy implements IPaymentService
         customer.addVideogame(videogame);
 
         //Update the customer record in the databse with the new data
-        customerInformationRetriverService.updateCustomer(customer);
+        customerInfoRetriver.updateCustomer(customer);
 
         //update the videogame record in the database with the new data
         videogameUpdateService.storeNewVideogame(videogame);
 
         //create an order and a history record of the user balance before and after the payment
         Order order = orderService.createOrder(customer,videogame);
-        customerMoneyHistoryService.createRecord(order, oldCustomerBalance,newUserBalance);
+        customerMoneyHistorySaver.presistPaymentRecord(order, oldCustomerBalance,newUserBalance);
 
         // Send Physical Order Mail
         String mailSubject = "";

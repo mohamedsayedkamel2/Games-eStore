@@ -1,4 +1,4 @@
-package com.store.videogames.util.common;
+package com.store.videogames.security;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

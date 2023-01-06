@@ -1,6 +1,6 @@
 package com.store.videogames.controller.videogame;
 
-import com.store.videogames.config.security.CustomerDetailsImpl;
+import com.store.videogames.security.CustomerDetailsImpl;
 import com.store.videogames.entites.enums.PaymentMethod;
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Videogame;
@@ -21,16 +21,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/videogames")
-public class VideogamesPaymentController
+public class VideogamesPayment
 {
     private final VideogameRetrivingService videogameRetrivingService;
     private final VideogameRepository videogameRepository;
     private final PaymentExecutionService paymentExecutionService;
 
     @Autowired
-    public VideogamesPaymentController(VideogameRetrivingService videogameRetrivingService,
-                                       VideogameRepository videogameRepository,
-                                       PaymentExecutionService paymentExecutionService)
+    public VideogamesPayment(VideogameRetrivingService videogameRetrivingService,
+                             VideogameRepository videogameRepository,
+                             PaymentExecutionService paymentExecutionService)
     {
         this.videogameRetrivingService = videogameRetrivingService;
         this.videogameRepository = videogameRepository;

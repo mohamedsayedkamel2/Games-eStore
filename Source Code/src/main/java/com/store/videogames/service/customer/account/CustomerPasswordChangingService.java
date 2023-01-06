@@ -2,8 +2,8 @@ package com.store.videogames.service.customer.account;
 
 import com.store.videogames.entites.Customer;
 import com.store.videogames.exceptions.exception.InvalidPasswordRestToken;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
-import com.store.videogames.util.common.PasswordEncoder;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
+import com.store.videogames.security.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +13,21 @@ import javax.transaction.Transactional;
 @Transactional
 public class CustomerPasswordChangingService
 {
-    private final CustomerInformationRetriverService customerInformationRetriverService;
+    private final CustomerInfoRetriver customerInfoRetriver;
 
     @Autowired
-    public CustomerPasswordChangingService(CustomerInformationRetriverService customerInformationRetriverService)
+    public CustomerPasswordChangingService(CustomerInfoRetriver customerInfoRetriver)
     {
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerInfoRetriver = customerInfoRetriver;
     }
 
     public void updateResetPasswordToken(String token, String email)
     {
-        Customer customer = customerInformationRetriverService.getCustomerbyEmail(email);
+        Customer customer = customerInfoRetriver.getCustomerbyEmail(email);
         if (customer != null)
         {
             customer.setResetPasswordToken(token);
-            customerInformationRetriverService.updateCustomer(customer);
+            customerInfoRetriver.updateCustomer(customer);
         }
         else
         {
@@ -41,6 +41,6 @@ public class CustomerPasswordChangingService
         String encodedPassword = PasswordEncoder.getBcryptPasswordEncoder().encode(newPassword);
         customer.setPassword(encodedPassword);
         customer.setResetPasswordToken(null);
-        customerInformationRetriverService.updateCustomer(customer);
+        customerInfoRetriver.updateCustomer(customer);
     }
 }

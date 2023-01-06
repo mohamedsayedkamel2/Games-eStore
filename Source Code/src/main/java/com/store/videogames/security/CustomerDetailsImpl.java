@@ -1,4 +1,4 @@
-package com.store.videogames.config.security;
+package com.store.videogames.security;
 
 import com.store.videogames.entites.Customer;
 import com.store.videogames.entites.Roles;

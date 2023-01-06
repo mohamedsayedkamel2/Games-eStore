@@ -6,9 +6,9 @@ import com.store.videogames.exceptions.exception.MessageEncodingErrorException;
 import com.store.videogames.exceptions.exception.EmailUnknownErrorException;
 import com.store.videogames.repository.CustomerRepository;
 import com.store.videogames.repository.RolesRepository;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
-import com.store.videogames.util.common.PasswordEncoder;
-import com.store.videogames.util.common.WebsiteUrlGetter;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
+import com.store.videogames.security.PasswordEncoder;
+import com.store.videogames.util.PageUrlGetter;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -27,18 +27,18 @@ import java.util.List;
 @Transactional
 public class CustomerRegistrationService
 {
-    private final CustomerInformationRetriverService customerInformationRetriverService;
+    private final CustomerInfoRetriver customerInfoRetriver;
     private final CustomerRepository customerRepository;
     private final RolesRepository rolesRepository;
     private final CustomerEmailService customerEmailService;
 
     @Autowired
-    public CustomerRegistrationService(CustomerInformationRetriverService customerInformationRetriverService,
+    public CustomerRegistrationService(CustomerInfoRetriver customerInfoRetriver,
                                        CustomerRepository customerRepository,
                                        RolesRepository rolesRepository,
                                        CustomerEmailService customerEmailService)
     {
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerInfoRetriver = customerInfoRetriver;
         this.customerRepository = customerRepository;
         this.rolesRepository = rolesRepository;
         this.customerEmailService = customerEmailService;
@@ -49,7 +49,7 @@ public class CustomerRegistrationService
     public void registerCustomer(Customer customer, HttpServletRequest httpServletRequest)
     {
         setCustomerData(customer);
-        customerInformationRetriverService.saveCustomerIntoDB(customer);
+        customerInfoRetriver.saveCustomerIntoDB(customer);
         sendVerificationEmail(httpServletRequest,customer);
     }
 
@@ -76,7 +76,7 @@ public class CustomerRegistrationService
     void sendVerificationEmail(HttpServletRequest request, Customer customer)
     {
         //This variable will store the website url and send it to send Verification Email function
-        String websiteUrl = WebsiteUrlGetter.getSiteURL(request);
+        String websiteUrl = PageUrlGetter.getSiteURL(request);
         try
         {
             customerEmailService.sendVerificationEmail(customer, websiteUrl);

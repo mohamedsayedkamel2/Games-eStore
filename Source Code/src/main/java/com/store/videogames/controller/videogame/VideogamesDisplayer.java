@@ -15,12 +15,12 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/videogames")
-public class VideogamesDisplayerController
+public class VideogamesDisplayer
 {
     private final VideogameRetrivingService videogameRetrivingService;
 
     @Autowired
-    public VideogamesDisplayerController(VideogameRetrivingService videogameRetrivingService)
+    public VideogamesDisplayer(VideogameRetrivingService videogameRetrivingService)
     {
         this.videogameRetrivingService = videogameRetrivingService;
     }

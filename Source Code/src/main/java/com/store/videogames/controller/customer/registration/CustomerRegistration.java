@@ -2,7 +2,7 @@ package com.store.videogames.controller.customer.registration;
 
 import com.store.videogames.exceptions.exception.InvalidRegistrationInformationException;
 import com.store.videogames.entites.Customer;
-import com.store.videogames.service.customer.CustomerInformationRetriverService;
+import com.store.videogames.service.customer.CustomerInfoRetriver;
 import com.store.videogames.service.customer.account.CustomerRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,15 +16,15 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @Controller
-public class CustomerRegistrationController 
+public class CustomerRegistration
 {
-    private CustomerInformationRetriverService customerInformationRetriverService;
+    private CustomerInfoRetriver customerInfoRetriver;
     private CustomerRegistrationService customerRegistrationService;
 
     @Autowired
-    public CustomerRegistrationController(CustomerInformationRetriverService customerInformationRetriverService, CustomerRegistrationService customerRegistrationService)
+    public CustomerRegistration(CustomerInfoRetriver customerInfoRetriver, CustomerRegistrationService customerRegistrationService)
     {
-        this.customerInformationRetriverService = customerInformationRetriverService;
+        this.customerInfoRetriver = customerInfoRetriver;
         this.customerRegistrationService = customerRegistrationService;
     }
 

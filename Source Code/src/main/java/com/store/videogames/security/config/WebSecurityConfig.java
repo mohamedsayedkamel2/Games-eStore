@@ -1,6 +1,7 @@
-package com.store.videogames.config.security;
+package com.store.videogames.security.config;
 
-import com.store.videogames.util.common.PasswordEncoder;
+import com.store.videogames.security.CustomerDetailsServiceImpl;
+import com.store.videogames.security.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

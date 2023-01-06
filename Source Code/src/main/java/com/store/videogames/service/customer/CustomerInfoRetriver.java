@@ -19,14 +19,17 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CustomerInformationRetriverService
+public class CustomerInfoRetriver
 {
+    /**
+     * Warning: Tight coupling to Spring Data JPA
+     */
     private final CustomerRepository customerRepository;
     private final CustomerMoneyHistoryRepository customerMoneyHistoryRepository;
 
     @Autowired
-    public CustomerInformationRetriverService(CustomerRepository customerRepository,
-                                              CustomerMoneyHistoryRepository customerMoneyHistoryRepository)
+    public CustomerInfoRetriver(CustomerRepository customerRepository,
+                                CustomerMoneyHistoryRepository customerMoneyHistoryRepository)
     {
         this.customerRepository = customerRepository;
         this.customerMoneyHistoryRepository = customerMoneyHistoryRepository;

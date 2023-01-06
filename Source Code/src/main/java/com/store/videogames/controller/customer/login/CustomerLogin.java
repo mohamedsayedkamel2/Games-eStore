@@ -1,11 +1,11 @@
 package com.store.videogames.controller.customer.login;
 
-import com.store.videogames.util.common.AuthenticationChecker;
+import com.store.videogames.security.AuthenticationChecker;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class CustomerLoginController
+public class CustomerLogin
 {
     @GetMapping("/login")
     public String getLoginPage()

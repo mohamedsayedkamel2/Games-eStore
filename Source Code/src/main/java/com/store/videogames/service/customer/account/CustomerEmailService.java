@@ -5,7 +5,6 @@ import com.store.videogames.exceptions.exception.CustomerIsAlreadyEnabledExcepti
 import com.store.videogames.exceptions.exception.CustomerNotFoundException;
 import com.store.videogames.repository.CustomerRepository;
 import com.store.videogames.util.EmailUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
